@@ -6,6 +6,7 @@ use DateTimeInterface;
 
 class Projeto
 {
+    private IdProjeto $id;
     private String $descricao;
     private float $orcamento;
 
@@ -14,9 +15,9 @@ class Projeto
         private bool $ativo,
         private String $criadoPor,
         private DateTimeInterface $criadoEm,
-        private IdProjeto $id
+        ?IdProjeto $id
     ) {
-
+        $this->id = ($id === null) ? IdProjeto::generate() : $id;
     }
 
     public function getID(): IdProjeto
