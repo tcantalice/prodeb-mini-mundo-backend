@@ -3,9 +3,13 @@
 namespace App\Repositories\Projeto;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Projeto extends Model
 {
+    use SoftDeletes;
+
+    public const ID = 'id';
     public const NOME = 'nome';
     public const DESCRICAO = 'descricao';
     public const ATIVO = 'ativo';
