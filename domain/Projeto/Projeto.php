@@ -13,9 +13,15 @@ class Projeto
         private String $nome,
         private bool $ativo,
         private String $criadoPor,
-        private DateTimeInterface $criadoEm
+        private DateTimeInterface $criadoEm,
+        private IdProjeto $id
     ) {
-        //
+
+    }
+
+    public function getID(): IdProjeto
+    {
+        return $this->id;
     }
 
     public function getNome(): String
