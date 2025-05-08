@@ -2,6 +2,8 @@
 
 namespace Domain\Projeto\Contracts;
 
+use Domain\Projeto\Projeto;
+
 interface ProjetoRepository
 {
     function save(Projeto $projeto): void;
