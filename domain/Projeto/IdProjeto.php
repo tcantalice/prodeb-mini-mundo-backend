@@ -4,7 +4,7 @@ namespace Domain\Projeto;
 
 class IdProjeto
 {
-    private String $valor;
+    public readonly String $valor;
 
     public function __construct(String $valor)
     {
