@@ -43,4 +43,14 @@ class Projeto
     {
         return $this->orcamento;
     }
+
+    public function ativar()
+    {
+        $this->ativo = true;
+    }
+
+    public function inativar()
+    {
+        $this->ativo = false;
+    }
 }
