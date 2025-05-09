@@ -48,44 +48,36 @@ class ProjetoRepositoryEloquent implements Contract
         }
     }
 
-    public function find(string $id): Projeto
+    public function find(string $id): ?Projeto
     {
         /**
          * @var Model $queryResult
          */
         $queryResult = Model::find($id);
 
-        if ($queryResult === null) {
-            throw new ProjetoNaoEncontradoException();
-        }
-
-        return new Projeto(
+        return $queryResult !== null ? new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
             IdProjeto::restore($queryResult->getKey())
-        );
+        ) : null;
     }
 
-    public function findByNome(string $nome): Projeto
+    public function findByNome(string $nome): ?Projeto
     {
         /**
          * @var Model $queryResult
          */
         $queryResult = Model::where(Model::NOME, $nome)->first();
 
-        if ($queryResult === null) {
-            throw new ProjetoNaoEncontradoException();
-        }
-
-        return new Projeto(
+        return $queryResult !== null ? new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
             IdProjeto::restore($queryResult->getKey())
-        );
+        ) : null;
     }
 
     public function existsByNome(string $nome): bool
