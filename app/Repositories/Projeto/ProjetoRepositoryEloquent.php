@@ -51,7 +51,7 @@ class ProjetoRepositoryEloquent implements Contract
         return new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
-            '',
+            new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
             new IdProjeto($queryResult->getKey())
         );
