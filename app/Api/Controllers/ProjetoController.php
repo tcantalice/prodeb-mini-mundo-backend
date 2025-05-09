@@ -48,8 +48,6 @@ class ProjetoController extends Controller
                 return [
                     'id' => $projeto->id,
                     'nome' => $projeto->nome,
-                    'descricao' => $projeto->descricao,
-                    'orcamento' => $projeto->orcamento,
                     'criado_em' => Carbon::createFromInterface($projeto->criadoEm)->format(DateTimeInterface::ATOM),
                     'criado_por' => [
                         'id' => $projeto->criadoPor->ref,
