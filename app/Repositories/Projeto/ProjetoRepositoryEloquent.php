@@ -42,6 +42,9 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function find(string $id): Projeto
     {
+        /**
+         * @var Model $queryResult
+         */
         $queryResult = Model::find($id);
 
         if ($queryResult === null) {
@@ -53,12 +56,15 @@ class ProjetoRepositoryEloquent implements Contract
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
-            new IdProjeto($queryResult->getKey())
+            IdProjeto::restore($queryResult->getKey())
         );
     }
 
     public function findByNome(string $nome): Projeto
     {
+        /**
+         * @var Model $queryResult
+         */
         $queryResult = Model::where(Model::NOME, $nome)->first();
 
         if ($queryResult === null) {
@@ -70,7 +76,7 @@ class ProjetoRepositoryEloquent implements Contract
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
-            new IdProjeto($queryResult->getKey())
+            IdProjeto::restore($queryResult->getKey())
         );
     }
 
@@ -95,15 +101,13 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function findAll(?ProjetoFilter $filtro = null): array
     {
-        $queryResult = Model::all();
-
-        return $queryResult->map(function ($item) {
+        return Model::all()->map(function ($item) {
             $projeto = new Projeto(
                 $item->getAttribute(Model::NOME),
                 $item->getAttribute(Model::ATIVO),
                 new CriadorProjeto('', ''),
                 $item->getAttribute(Model::CRIADO_EM),
-                new IdProjeto($item->getKey())
+                IdProjeto::restore($item->getKey())
             );
 
             $projeto->setDescricao($item->getAttribute(Model::DESCRICAO));
