@@ -32,4 +32,9 @@ class ProjetoController extends Controller
 
         return response()->json(['message' => 'Projeto criado com sucesso!']);
     }
+
+    public function list()
+    {
+
+    }
 }
