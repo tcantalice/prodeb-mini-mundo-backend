@@ -16,6 +16,8 @@ class ProjetoController extends Controller
 
     public function create(CriarProjetoRequest $request)
     {
+        $this->logger->info('Criando projeto');
+
         $useCaseInputData = new CriarProjetoDTO(
             $request->input('nome'),
             '', // TODO: Adicionar a referência do usuário autenticado
@@ -23,7 +25,10 @@ class ProjetoController extends Controller
             $request->input('orcamento')
         );
 
+        // TODO: Adicionar tratamento de exceções
         $this->criarProjetoUseCase->execute($useCaseInputData);
+
+        $this->logger->info('Projeto criado com sucesso');
 
         return response()->json(['message' => 'Projeto criado com sucesso!']);
     }
