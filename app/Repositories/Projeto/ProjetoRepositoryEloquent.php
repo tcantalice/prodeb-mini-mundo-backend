@@ -6,7 +6,9 @@ use App\Repositories\Projeto\Projeto as Model;
 use Domain\Projeto\IdProjeto;
 use Domain\Projeto\Projeto;
 use Domain\Projeto\Contracts\ProjetoRepository as Contract;
+use Domain\Projeto\CriadorProjeto;
 use Domain\Projeto\Exceptions\ProjetoNaoEncontradoException;
+use Domain\Projeto\ProjetoFilter;
 use Psr\Log\LoggerInterface;
 
 class ProjetoRepositoryEloquent implements Contract
@@ -20,13 +22,14 @@ class ProjetoRepositoryEloquent implements Contract
     {
         // TODO: Implementar esquema de update ou insert
         $model = new Model([
-            Model::ID => $projeto->getID()->valor,
             Model::NOME => $projeto->getNome(),
             Model::DESCRICAO => $projeto->getDescricao(),
             Model::ATIVO => $projeto->isAtivo(),
             Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
             Model::CRIADO_EM => $projeto->criadoEm(),
         ]);
+
+        $model->setAttribute(Model::ID, $projeto->getID()->valor);
 
         try {
             $model->save();
@@ -65,7 +68,7 @@ class ProjetoRepositoryEloquent implements Contract
         return new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
-            '',
+            new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
             new IdProjeto($queryResult->getKey())
         );
@@ -88,5 +91,25 @@ class ProjetoRepositoryEloquent implements Contract
 
             throw $th;
         }
+    }
+
+    public function findAll(?ProjetoFilter $filtro = null): array
+    {
+        $queryResult = Model::all();
+
+        return $queryResult->map(function ($item) {
+            $projeto = new Projeto(
+                $item->getAttribute(Model::NOME),
+                $item->getAttribute(Model::ATIVO),
+                new CriadorProjeto('', ''),
+                $item->getAttribute(Model::CRIADO_EM),
+                new IdProjeto($item->getKey())
+            );
+
+            $projeto->setDescricao($item->getAttribute(Model::DESCRICAO));
+            $projeto->setOrcamento($item->getAttribute(Model::ORCAMENTO_DISPONIVEL));
+
+            return $projeto;
+        })->toArray();
     }
 }
