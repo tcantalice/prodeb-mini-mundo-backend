@@ -4,18 +4,28 @@ namespace Domain\Projeto;
 
 class IdProjeto
 {
-    public readonly String $valor;
-
-    public function __construct(String $valor)
+    private function __construct(public readonly String $valor, public readonly bool $novo)
     {
-        $this->valor = $valor;
+        //
+    }
+
+    public static function restore(): IdProjeto
+    {
+        // Restaurar o UUID do Projeto
+
+        return new static('', false);
     }
 
     public static function generate(): IdProjeto
     {
         // Gerar o UUID do Projeto
 
-        return new static('');
+        return new static('', true);
+    }
+
+    public function isNovo(): bool
+    {
+        return $this->novo;
     }
 
     public function equals($other): bool
