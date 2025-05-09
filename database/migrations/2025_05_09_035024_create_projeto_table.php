@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nome', 100);
             $table->text('descricao')->nullable();
             $table->boolean('ativo');
-            $table->decimal('orcamento_disponivel', 10, 2)->nullabel();
+            $table->decimal('orcamento_disponivel', 10, 2)->nullable();
             $table->dateTimeTz('criado_em');
             $table->softDeletesTz();
         });
