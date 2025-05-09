@@ -33,4 +33,8 @@ class Projeto extends Model
         self::CRIADO_EM,
         self::CRIADOR_ID,
     ];
+
+    protected $casts = [
+        self::CRIADO_EM => 'datetime',
+    ];
 }
