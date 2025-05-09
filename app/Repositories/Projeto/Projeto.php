@@ -24,4 +24,13 @@ class Projeto extends Model
     protected $keyType = 'string';
 
     protected $primaryKey = 'id';
+
+    public $fillable = [
+        self::NOME,
+        self::DESCRICAO,
+        self::ATIVO,
+        self::ORCAMENTO_DISPONIVEL,
+        self::CRIADO_EM,
+        self::CRIADOR_ID,
+    ];
 }
