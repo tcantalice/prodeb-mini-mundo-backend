@@ -45,6 +45,11 @@ class Projeto
         return $this->orcamento;
     }
 
+    public function criadoEm(): DateTimeInterface
+    {
+        return $this->criadoEm;
+    }
+
     public function ativar()
     {
         $this->ativo = true;
