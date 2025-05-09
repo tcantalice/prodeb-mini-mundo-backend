@@ -18,6 +18,8 @@ class Projeto
         ?IdProjeto $id
     ) {
         $this->id = ($id === null) ? IdProjeto::generate() : $id;
+        $this->descricao = null;
+        $this->orcamento = null;
     }
 
     public function getID(): IdProjeto
@@ -35,7 +37,7 @@ class Projeto
         return $this->ativo;
     }
 
-    public function getDescricao(): String
+    public function getDescricao(): ?String
     {
         return $this->descricao;
     }
