@@ -18,7 +18,23 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function save(Projeto $projeto): void
     {
-        //
+        // TODO: Implementar esquema de update ou insert
+        $model = new Model([
+            Model::ID => $projeto->getID()->valor,
+            Model::NOME => $projeto->getNome(),
+            Model::DESCRICAO => $projeto->getDescricao(),
+            Model::ATIVO => $projeto->isAtivo(),
+            Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
+            Model::CRIADO_EM => $projeto->criadoEm(),
+        ]);
+
+        try {
+            $model->save();
+        } catch(\Throwable $th) {
+            $this->logger->error(
+                "Ocorreu uma falha durante a execução da operação no banco de dados: {$th->getMessage()}"
+            );
+        }
     }
 
     public function find(string $id): Projeto
