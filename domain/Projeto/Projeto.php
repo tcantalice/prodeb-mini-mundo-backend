@@ -57,12 +57,12 @@ class Projeto
         return $this->criadoPor;
     }
 
-    public function setDescricao(String $descricao): void
+    public function setDescricao(?String $descricao): void
     {
         $this->descricao = $descricao;
     }
 
-    public function setOrcamento(float $orcamento): void
+    public function setOrcamento(?float $orcamento): void
     {
         // TODO: Implementar validação de orçamento
         $this->orcamento = $orcamento;
