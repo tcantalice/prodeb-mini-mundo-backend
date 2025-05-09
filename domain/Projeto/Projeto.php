@@ -57,6 +57,11 @@ class Projeto
         return $this->criadoPor;
     }
 
+    public function setNome(String $nome): void
+    {
+        $this->nome = $nome;
+    }
+
     public function setDescricao(?String $descricao): void
     {
         $this->descricao = $descricao;
