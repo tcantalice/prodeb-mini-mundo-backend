@@ -18,6 +18,8 @@ class Projeto
         ?IdProjeto $id
     ) {
         $this->id = ($id === null) ? IdProjeto::generate() : $id;
+        $this->descricao = null;
+        $this->orcamento = null;
     }
 
     public function getID(): IdProjeto
@@ -35,7 +37,7 @@ class Projeto
         return $this->ativo;
     }
 
-    public function getDescricao(): String
+    public function getDescricao(): ?String
     {
         return $this->descricao;
     }
@@ -55,12 +57,12 @@ class Projeto
         return $this->criadoPor;
     }
 
-    public function setDescricao(String $descricao): void
+    public function setDescricao(?String $descricao): void
     {
         $this->descricao = $descricao;
     }
 
-    public function setOrcamento(float $orcamento): void
+    public function setOrcamento(?float $orcamento): void
     {
         // TODO: Implementar validação de orçamento
         $this->orcamento = $orcamento;

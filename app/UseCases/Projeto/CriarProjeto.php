@@ -31,10 +31,18 @@ class CriarProjeto
             null
         );
 
+        if ($input->descricao !== null) {
+            $projeto->setDescricao($input->descricao);
+        }
+
+        if ($input->orcamento !== null) {
+            $projeto->setOrcamento($input->orcamento);
+        }
+
         try {
             $this->projetoRepo->save($projeto);
         } catch(\Throwable $th) {
-            $this->logger->error('Um erro inesperado ocorreu');
+            $this->logger->error('Um erro inesperado ocorreu: ' . $th->getMessage());
         }
     }
 }

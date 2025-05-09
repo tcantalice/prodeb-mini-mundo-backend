@@ -3,6 +3,7 @@
 namespace Domain\Projeto\Contracts;
 
 use Domain\Projeto\Projeto;
+use Domain\Projeto\ProjetoFilter;
 
 interface ProjetoRepository
 {
@@ -15,4 +16,6 @@ interface ProjetoRepository
     function findByNome(String $nome): Projeto;
 
     function remove(Projeto $projeto): void;
+
+    function findAll(?ProjetoFilter $filtros = null): array;
 }
