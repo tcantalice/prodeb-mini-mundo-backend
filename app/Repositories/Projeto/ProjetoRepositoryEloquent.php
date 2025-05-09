@@ -20,16 +20,24 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function save(Projeto $projeto): void
     {
-        // TODO: Implementar esquema de update ou insert
-        $model = new Model([
-            Model::NOME => $projeto->getNome(),
-            Model::DESCRICAO => $projeto->getDescricao(),
-            Model::ATIVO => $projeto->isAtivo(),
-            Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
-            Model::CRIADO_EM => $projeto->criadoEm(),
-        ]);
+        if ($projeto->getID()->isNovo()) {
+            $model = new Model([
+                Model::NOME => $projeto->getNome(),
+                Model::DESCRICAO => $projeto->getDescricao(),
+                Model::ATIVO => $projeto->isAtivo(),
+                Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
+                Model::CRIADO_EM => $projeto->criadoEm(),
+            ]);
 
-        $model->setAttribute(Model::ID, $projeto->getID()->valor);
+            $model->setAttribute(Model::ID, $projeto->getID()->valor);
+        } else {
+            $model = Model::find($projeto->getID()->valor);
+
+            $model->setAttribute(Model::NOME, $projeto->getNome());
+            $model->setAttribute(Model::DESCRICAO, $projeto->getDescricao());
+            $model->setAttribute(Model::ORCAMENTO_DISPONIVEL, $projeto->getOrcamento());
+            $model->setAttribute(Model::ATIVO, $projeto->isAtivo());
+        }
 
         try {
             $model->save();
