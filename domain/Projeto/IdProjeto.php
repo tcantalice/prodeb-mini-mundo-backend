@@ -15,7 +15,7 @@ class IdProjeto
     {
         // Gerar o UUID do Projeto
 
-        return New static('');
+        return new static('');
     }
 
     public function equals($other): bool
