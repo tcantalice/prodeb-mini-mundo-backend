@@ -6,17 +6,18 @@ use DateTimeInterface;
 
 class Projeto
 {
-    private String $descricao;
-    private float $orcamento;
+    private IdProjeto $id;
+    private ?String $descricao;
+    private ?float $orcamento;
 
     public function __construct(
         private String $nome,
         private bool $ativo,
-        private String $criadoPor,
+        private CriadorProjeto $criadoPor,
         private DateTimeInterface $criadoEm,
-        private IdProjeto $id
+        ?IdProjeto $id
     ) {
-
+        $this->id = ($id === null) ? IdProjeto::generate() : $id;
     }
 
     public function getID(): IdProjeto
@@ -39,8 +40,39 @@ class Projeto
         return $this->descricao;
     }
 
-    public function getOrcamento(): float
+    public function getOrcamento(): ?float
     {
         return $this->orcamento;
+    }
+
+    public function criadoEm(): DateTimeInterface
+    {
+        return $this->criadoEm;
+    }
+
+    public function criadoPor(): CriadorProjeto
+    {
+        return $this->criadoPor;
+    }
+
+    public function setDescricao(String $descricao): void
+    {
+        $this->descricao = $descricao;
+    }
+
+    public function setOrcamento(float $orcamento): void
+    {
+        // TODO: Implementar validação de orçamento
+        $this->orcamento = $orcamento;
+    }
+
+    public function ativar()
+    {
+        $this->ativo = true;
+    }
+
+    public function inativar()
+    {
+        $this->ativo = false;
     }
 }

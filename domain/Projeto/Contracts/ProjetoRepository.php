@@ -1,6 +1,8 @@
 <?php
 
-namespace Domain\Projeto;
+namespace Domain\Projeto\Contracts;
+
+use Domain\Projeto\Projeto;
 
 interface ProjetoRepository
 {
