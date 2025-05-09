@@ -2,8 +2,8 @@
 
 namespace App\UseCases\Projeto;
 
-use DateTimeInterface;
 use Domain\Projeto\Contracts\ProjetoRepository;
+use Domain\Projeto\CriadorProjeto;
 use Domain\Projeto\Exceptions\NomeJaExisteException;
 use Domain\Projeto\Projeto;
 use Psr\Log\LoggerInterface;
@@ -26,7 +26,7 @@ class CriarProjeto
         $projeto = new Projeto(
             $input->nome,
             true,
-            '', // TODO: Adicionar referência ao usuário autenticado
+            new CriadorProjeto($input->refUsuarioCriador, ''),
             date_create(),
             null
         );
