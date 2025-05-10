@@ -4,6 +4,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\Projeto\CriarProjetoRequest;
 use App\Api\Requests\Projeto\EditarProjetoRequest;
+use App\UseCases\Projeto\ConsultarProjeto;
 use App\UseCases\Projeto\CriarProjeto;
 use App\UseCases\Projeto\CriarProjetoDTO;
 use App\UseCases\Projeto\EditarProjeto;
@@ -16,7 +17,7 @@ use Psr\Log\LoggerInterface;
 
 class ProjetoController extends Controller
 {
-    public function __construct(LoggerInterface $logger, )
+    public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
     }
@@ -80,6 +81,32 @@ class ProjetoController extends Controller
                     ],
                 ];
             })->toArray()
+        );
+    }
+
+    public function get(string $id, ConsultarProjeto $consultarProjetoUseCase)
+    {
+        $this->logger->info('Consultando projeto com ID: ' . $id);
+
+        try {
+            $projeto = $consultarProjetoUseCase->execute($id);
+        } catch (\Throwable $th) {
+            $this->logger->error('Erro ao consultar projeto: ' . $th->getMessage());
+            return response()->json(['message' => 'Erro ao consultar projeto'], 500);
+        }
+
+        return $this->makeSuccessResponse(
+            [
+                'id' => $projeto->id,
+                'nome' => $projeto->nome,
+                'descricao' => $projeto->descricao,
+                'orcamento' => $projeto->orcamento,
+                'criado_em' => Carbon::createFromInterface($projeto->criadoEm)->format(DateTimeInterface::ATOM),
+                'criado_por' => [
+                    'id' => $projeto->criadoPor->ref,
+                    'nome' => $projeto->criadoPor->nome,
+                ],
+            ]
         );
     }
 }
