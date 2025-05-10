@@ -3,8 +3,11 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\Projeto\CriarProjetoRequest;
+use App\Api\Requests\Projeto\EditarProjetoRequest;
 use App\UseCases\Projeto\CriarProjeto;
 use App\UseCases\Projeto\CriarProjetoDTO;
+use App\UseCases\Projeto\EditarProjeto;
+use App\UseCases\Projeto\EditarProjetoDTO;
 use App\UseCases\Projeto\ListarProjetos;
 use App\UseCases\Projeto\ProjetoDTO;
 use Carbon\Carbon;
@@ -34,7 +37,29 @@ class ProjetoController extends Controller
 
         $this->logger->info('Projeto criado com sucesso');
 
-        return response()->json(['message' => 'Projeto criado com sucesso!']);
+        return $this->makeSuccessResponse(statusCode: 201);
+    }
+
+    public function update(string $idProjeto, EditarProjetoRequest $request, EditarProjeto $editarProjetoUseCase)
+    {
+        $this->logger->info('Atualizando projeto');
+
+        $useCaseInputData = new EditarProjetoDTO(
+            $idProjeto,
+            $request->input('nome'),
+            $request->input('descricao'),
+            $request->input('orcamento'),
+            $request->input('ativo')
+        );
+
+        try {
+            $editarProjetoUseCase->execute($useCaseInputData);
+        } catch (\Throwable $th) {
+            $this->logger->error('Erro ao atualizar projeto: ' . $th->getMessage());
+            return response()->json(['message' => 'Erro ao atualizar projeto'], 500);
+        }
+
+        return $this->makeSuccessResponse(statusCode: 200);
     }
 
     public function list(ListarProjetos $listarProjetosUseCase)
@@ -43,7 +68,7 @@ class ProjetoController extends Controller
 
         $projetos = $listarProjetosUseCase->execute();
 
-        return response()->json(
+        return $this->makeSuccessResponse(
             collect($projetos)->map(function (ProjetoDTO $projeto) {
                 return [
                     'id' => $projeto->id,
@@ -54,7 +79,7 @@ class ProjetoController extends Controller
                         'nome' => $projeto->criadoPor->nome,
                     ],
                 ];
-            })
+            })->toArray()
         );
     }
 }

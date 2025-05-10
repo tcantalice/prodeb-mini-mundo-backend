@@ -20,16 +20,24 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function save(Projeto $projeto): void
     {
-        // TODO: Implementar esquema de update ou insert
-        $model = new Model([
-            Model::NOME => $projeto->getNome(),
-            Model::DESCRICAO => $projeto->getDescricao(),
-            Model::ATIVO => $projeto->isAtivo(),
-            Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
-            Model::CRIADO_EM => $projeto->criadoEm(),
-        ]);
+        if ($projeto->getID()->isNovo()) {
+            $model = new Model([
+                Model::NOME => $projeto->getNome(),
+                Model::DESCRICAO => $projeto->getDescricao(),
+                Model::ATIVO => $projeto->isAtivo(),
+                Model::ORCAMENTO_DISPONIVEL => $projeto->getOrcamento(),
+                Model::CRIADO_EM => $projeto->criadoEm(),
+            ]);
 
-        $model->setAttribute(Model::ID, $projeto->getID()->valor);
+            $model->setAttribute(Model::ID, $projeto->getID()->valor);
+        } else {
+            $model = Model::find($projeto->getID()->valor);
+
+            $model->setAttribute(Model::NOME, $projeto->getNome());
+            $model->setAttribute(Model::DESCRICAO, $projeto->getDescricao());
+            $model->setAttribute(Model::ORCAMENTO_DISPONIVEL, $projeto->getOrcamento());
+            $model->setAttribute(Model::ATIVO, $projeto->isAtivo());
+        }
 
         try {
             $model->save();
@@ -40,38 +48,36 @@ class ProjetoRepositoryEloquent implements Contract
         }
     }
 
-    public function find(string $id): Projeto
+    public function find(string $id): ?Projeto
     {
+        /**
+         * @var Model $queryResult
+         */
         $queryResult = Model::find($id);
 
-        if ($queryResult === null) {
-            throw new ProjetoNaoEncontradoException();
-        }
-
-        return new Projeto(
+        return $queryResult !== null ? new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
-            new IdProjeto($queryResult->getKey())
-        );
+            IdProjeto::restore($queryResult->getKey())
+        ) : null;
     }
 
-    public function findByNome(string $nome): Projeto
+    public function findByNome(string $nome): ?Projeto
     {
+        /**
+         * @var Model $queryResult
+         */
         $queryResult = Model::where(Model::NOME, $nome)->first();
 
-        if ($queryResult === null) {
-            throw new ProjetoNaoEncontradoException();
-        }
-
-        return new Projeto(
+        return $queryResult !== null ? new Projeto(
             $queryResult->getAttribute(Model::NOME),
             $queryResult->getAttribute(Model::ATIVO),
             new CriadorProjeto('', ''),
             $queryResult->getAttribute(Model::CRIADO_EM),
-            new IdProjeto($queryResult->getKey())
-        );
+            IdProjeto::restore($queryResult->getKey())
+        ) : null;
     }
 
     public function existsByNome(string $nome): bool
@@ -95,15 +101,13 @@ class ProjetoRepositoryEloquent implements Contract
 
     public function findAll(?ProjetoFilter $filtro = null): array
     {
-        $queryResult = Model::all();
-
-        return $queryResult->map(function ($item) {
+        return Model::all()->map(function ($item) {
             $projeto = new Projeto(
                 $item->getAttribute(Model::NOME),
                 $item->getAttribute(Model::ATIVO),
                 new CriadorProjeto('', ''),
                 $item->getAttribute(Model::CRIADO_EM),
-                new IdProjeto($item->getKey())
+                IdProjeto::restore($item->getKey())
             );
 
             $projeto->setDescricao($item->getAttribute(Model::DESCRICAO));
