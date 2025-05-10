@@ -7,4 +7,5 @@ Route::middleware('api')
     ->group(function () {
         Route::post('/projetos', [ProjetoController::class, 'create']);
         Route::get('/projetos', [ProjetoController::class, 'list']);
+        Route::put('/projetos/{idProjeto}', [ProjetoController::class, 'update']);
     });
