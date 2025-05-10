@@ -2,6 +2,8 @@
 
 namespace Domain\Projeto;
 
+use Common\Utils\Uuid;
+
 class IdProjeto
 {
     private function __construct(public readonly String $valor, public readonly bool $novo)
@@ -9,18 +11,18 @@ class IdProjeto
         //
     }
 
-    public static function restore(): IdProjeto
+    public static function restore(string $id): IdProjeto
     {
-        // Restaurar o UUID do Projeto
+        if (!Uuid::isValid($id)) {
+            throw new \InvalidArgumentException('Formato do ID do projeto é inválido.');
+        }
 
-        return new static('', false);
+        return new static($id, false);
     }
 
     public static function generate(): IdProjeto
     {
-        // Gerar o UUID do Projeto
-
-        return new static('', true);
+        return new static(Uuid::generate(), true);
     }
 
     public function isNovo(): bool
