@@ -1,12 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "tcantalice/prodeb-mini-mundo",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
+    "keywords": [],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -27,6 +24,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Common\\": "common/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Domain\\": "domain/"
