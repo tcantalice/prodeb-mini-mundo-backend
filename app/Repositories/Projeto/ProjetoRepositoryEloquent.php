@@ -7,7 +7,6 @@ use Domain\Projeto\IdProjeto;
 use Domain\Projeto\Projeto;
 use Domain\Projeto\Contracts\ProjetoRepository as Contract;
 use Domain\Projeto\CriadorProjeto;
-use Domain\Projeto\Exceptions\ProjetoNaoEncontradoException;
 use Domain\Projeto\ProjetoFilter;
 use Psr\Log\LoggerInterface;
 
