@@ -19,8 +19,8 @@ abstract class Controller
 
     protected function makeSuccessResponse(?array $data = null, int $statusCode = 200)
     {
-        return response()->json([
-            "data" => $data
-        ], $statusCode);
+        return $data !== null
+            ? response()->json(["data" => $data], $statusCode)
+            : response(status: $statusCode);
     }
 }
