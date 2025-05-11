@@ -15,7 +15,7 @@ class EditarProjetoRequest extends FormRequest
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string|max:255',
             'ativo' => 'required|boolean',
-            'orcamento_disponivel' => 'nullable|numeric|min:0',
+            'orcamento' => 'nullable|numeric|min:0',
         ];
     }
 }

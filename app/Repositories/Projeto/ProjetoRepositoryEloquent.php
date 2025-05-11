@@ -53,14 +53,22 @@ class ProjetoRepositoryEloquent implements Contract
          * @var Model $queryResult
          */
         $queryResult = Model::find($id);
+        $result = null;
 
-        return $queryResult !== null ? new Projeto(
-            $queryResult->getAttribute(Model::NOME),
-            $queryResult->getAttribute(Model::ATIVO),
-            new CriadorProjeto('', ''),
-            $queryResult->getAttribute(Model::CRIADO_EM),
-            IdProjeto::restore($queryResult->getKey())
-        ) : null;
+        if ($queryResult !== null) {
+            $result = new Projeto(
+                $queryResult->getAttribute(Model::NOME),
+                $queryResult->getAttribute(Model::ATIVO),
+                new CriadorProjeto('', ''),
+                $queryResult->getAttribute(Model::CRIADO_EM),
+                IdProjeto::restore($queryResult->getKey())
+            );
+
+            $result->setDescricao($queryResult->getAttribute(Model::DESCRICAO));
+            $result->setOrcamento($queryResult->getAttribute(Model::ORCAMENTO_DISPONIVEL));
+        }
+
+        return $result;
     }
 
     public function findByNome(string $nome): ?Projeto
@@ -69,14 +77,22 @@ class ProjetoRepositoryEloquent implements Contract
          * @var Model $queryResult
          */
         $queryResult = Model::where(Model::NOME, $nome)->first();
+        $result = null;
 
-        return $queryResult !== null ? new Projeto(
-            $queryResult->getAttribute(Model::NOME),
-            $queryResult->getAttribute(Model::ATIVO),
-            new CriadorProjeto('', ''),
-            $queryResult->getAttribute(Model::CRIADO_EM),
-            IdProjeto::restore($queryResult->getKey())
-        ) : null;
+        if ($queryResult !== null) {
+            $result = new Projeto(
+                $queryResult->getAttribute(Model::NOME),
+                $queryResult->getAttribute(Model::ATIVO),
+                new CriadorProjeto('', ''),
+                $queryResult->getAttribute(Model::CRIADO_EM),
+                IdProjeto::restore($queryResult->getKey())
+            );
+
+            $result->setDescricao($queryResult->getAttribute(Model::DESCRICAO));
+            $result->setOrcamento($queryResult->getAttribute(Model::ORCAMENTO_DISPONIVEL));
+        }
+
+        return $result;
     }
 
     public function existsByNome(string $nome): bool

@@ -35,6 +35,7 @@ class Projeto extends Model
     ];
 
     protected $casts = [
+        self::ATIVO => 'boolean',
         self::CRIADO_EM => 'datetime',
     ];
 }
