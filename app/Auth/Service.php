@@ -2,8 +2,6 @@
 
 namespace App\Auth;
 
-use App\Domain\Usuario\Contracts\AuthenticationSuccess;
-
 class Service
 {
     public function __construct() {
@@ -14,11 +12,11 @@ class Service
     {
         $credentials = [
             User::LOGIN => $login,
-            User::SENHA => $password,
+            'password' => $password,
         ];
 
         if (!$token = auth()->attempt($credentials)) {
-            throw new \Exception(); // TODO: Alterar para uma exception mais específica
+            throw new \Exception('Credenciais inválidas');
         }
 
         return new AuthenticationSuccess(
