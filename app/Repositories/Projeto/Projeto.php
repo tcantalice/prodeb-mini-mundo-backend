@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Projeto;
 
+use App\Repositories\Usuario\Usuario;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -38,4 +39,14 @@ class Projeto extends Model
         self::ATIVO => 'boolean',
         self::CRIADO_EM => 'datetime',
     ];
+
+    public function criador()
+    {
+        return $this->belongsTo(Usuario::class, self::CRIADOR_ID);
+    }
+
+    public function setCriador(string $id): void
+    {
+        $this->criador()->associate(Usuario::where(Usuario::LOGIN, $id)->first());
+    }
 }
