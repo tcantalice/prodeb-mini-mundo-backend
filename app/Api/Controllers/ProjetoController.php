@@ -11,8 +11,7 @@ use App\UseCases\Projeto\EditarProjeto;
 use App\UseCases\Projeto\EditarProjetoDTO;
 use App\UseCases\Projeto\ListarProjetos;
 use App\UseCases\Projeto\ProjetoDTO;
-use Carbon\Carbon;
-use \DateTimeInterface;
+use Illuminate\Support\Facades\Auth;
 use Psr\Log\LoggerInterface;
 
 class ProjetoController extends Controller
@@ -28,7 +27,7 @@ class ProjetoController extends Controller
 
         $useCaseInputData = new CriarProjetoDTO(
             $request->input('nome'),
-            '', // TODO: Adicionar a referência do usuário autenticado
+            Auth::user()->getAuthIdentifier(),
             $request->input('descricao'),
             $request->input('orcamento')
         );
@@ -74,7 +73,7 @@ class ProjetoController extends Controller
                 return [
                     'id' => $projeto->id,
                     'nome' => $projeto->nome,
-                    'criado_em' => Carbon::createFromInterface($projeto->criadoEm)->format(DateTimeInterface::ATOM),
+                    'criado_em' => $this->serializeDateTime($projeto->criadoEm),
                     'criado_por' => [
                         'id' => $projeto->criadoPor->ref,
                         'nome' => $projeto->criadoPor->nome,
@@ -101,7 +100,7 @@ class ProjetoController extends Controller
                 'nome' => $projeto->nome,
                 'descricao' => $projeto->descricao,
                 'orcamento' => $projeto->orcamento,
-                'criado_em' => Carbon::createFromInterface($projeto->criadoEm)->format(DateTimeInterface::ATOM),
+                'criado_em' => $this->serializeDateTime($projeto->criadoEm),
                 'criado_por' => [
                     'id' => $projeto->criadoPor->ref,
                     'nome' => $projeto->criadoPor->nome,

@@ -3,10 +3,8 @@
 namespace App\Repositories\Projeto;
 
 use App\Repositories\Projeto\Projeto as Model;
-use Domain\Projeto\IdProjeto;
 use Domain\Projeto\Projeto;
 use Domain\Projeto\Contracts\ProjetoRepository as Contract;
-use Domain\Projeto\CriadorProjeto;
 use Domain\Projeto\ProjetoFilter;
 use Psr\Log\LoggerInterface;
 
@@ -29,6 +27,7 @@ class ProjetoRepositoryEloquent implements Contract
             ]);
 
             $model->setAttribute(Model::ID, $projeto->getID()->valor);
+            $model->setCriador($projeto->criadoPor()->getRef());
         } else {
             $model = Model::find($projeto->getID()->valor);
 
@@ -53,22 +52,8 @@ class ProjetoRepositoryEloquent implements Contract
          * @var Model $queryResult
          */
         $queryResult = Model::find($id);
-        $result = null;
 
-        if ($queryResult !== null) {
-            $result = new Projeto(
-                $queryResult->getAttribute(Model::NOME),
-                $queryResult->getAttribute(Model::ATIVO),
-                new CriadorProjeto('', ''),
-                $queryResult->getAttribute(Model::CRIADO_EM),
-                IdProjeto::restore($queryResult->getKey())
-            );
-
-            $result->setDescricao($queryResult->getAttribute(Model::DESCRICAO));
-            $result->setOrcamento($queryResult->getAttribute(Model::ORCAMENTO_DISPONIVEL));
-        }
-
-        return $result;
+        return $queryResult !== null ? $queryResult->toEntity() : null;
     }
 
     public function findByNome(string $nome): ?Projeto
@@ -77,27 +62,12 @@ class ProjetoRepositoryEloquent implements Contract
          * @var Model $queryResult
          */
         $queryResult = Model::where(Model::NOME, $nome)->first();
-        $result = null;
 
-        if ($queryResult !== null) {
-            $result = new Projeto(
-                $queryResult->getAttribute(Model::NOME),
-                $queryResult->getAttribute(Model::ATIVO),
-                new CriadorProjeto('', ''),
-                $queryResult->getAttribute(Model::CRIADO_EM),
-                IdProjeto::restore($queryResult->getKey())
-            );
-
-            $result->setDescricao($queryResult->getAttribute(Model::DESCRICAO));
-            $result->setOrcamento($queryResult->getAttribute(Model::ORCAMENTO_DISPONIVEL));
-        }
-
-        return $result;
+        return $queryResult !== null ? $queryResult->toEntity() : null;
     }
 
     public function existsByNome(string $nome): bool
     {
-        // TODO: Checar regra quanto ao nível de semelhança
         return Model::where(Model::NOME, $nome)->exists();
     }
 
@@ -117,18 +87,7 @@ class ProjetoRepositoryEloquent implements Contract
     public function findAll(?ProjetoFilter $filtro = null): array
     {
         return Model::all()->map(function ($item) {
-            $projeto = new Projeto(
-                $item->getAttribute(Model::NOME),
-                $item->getAttribute(Model::ATIVO),
-                new CriadorProjeto('', ''),
-                $item->getAttribute(Model::CRIADO_EM),
-                IdProjeto::restore($item->getKey())
-            );
-
-            $projeto->setDescricao($item->getAttribute(Model::DESCRICAO));
-            $projeto->setOrcamento($item->getAttribute(Model::ORCAMENTO_DISPONIVEL));
-
-            return $projeto;
+            return $item->toEntity();
         })->toArray();
     }
 }
