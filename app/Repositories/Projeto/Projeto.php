@@ -17,7 +17,7 @@ class Projeto extends Model
     public const ATIVO = 'ativo';
     public const ORCAMENTO_DISPONIVEL = 'orcamento_disponivel';
     public const CRIADO_EM = 'criado_em';
-    public const CRIADOR_ID = 'criador_id';
+    public const CRIADOR_ID = 'usuario_criador_id';
 
     protected $table = 'projeto';
 
@@ -45,7 +45,7 @@ class Projeto extends Model
         'relationCriador'
     ];
 
-    protected function relationCriador()
+    public function relationCriador()
     {
         return $this->belongsTo(Usuario::class, self::CRIADOR_ID);
     }
@@ -58,8 +58,8 @@ class Projeto extends Model
     public function getCriador(): CriadorProjeto
     {
         return new CriadorProjeto(
-            $this->relationCriador()->getAttribute(Usuario::LOGIN),
-            $this->relationCriador()->getAttribute(Usuario::NOME)
+            $this->relationCriador->getAttribute(Usuario::LOGIN),
+            $this->relationCriador->getAttribute(Usuario::NOME)
         );
     }
 
