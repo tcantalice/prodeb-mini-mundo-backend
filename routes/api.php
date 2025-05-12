@@ -1,10 +1,15 @@
 <?php
 
+use App\Api\Controllers\AuthController;
 use App\Api\Controllers\ProjetoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('api')
     ->group(function () {
+        Route::prefix('/auth')->group(function () {
+            Route::post('/login', [AuthController::class, 'login']);
+        });
+
         Route::post('/projetos', [ProjetoController::class, 'create']);
         Route::get('/projetos', [ProjetoController::class, 'list']);
         Route::get('/projetos/{idProjeto}', [ProjetoController::class, 'get']);
