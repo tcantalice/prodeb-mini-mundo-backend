@@ -3,6 +3,7 @@
 namespace App\Repositories\Projeto;
 
 use App\Repositories\Usuario\Usuario;
+use Domain\Projeto\CriadorProjeto;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,13 +41,41 @@ class Projeto extends Model
         self::CRIADO_EM => 'datetime',
     ];
 
-    public function criador()
+    public $with = [
+        'relationCriador'
+    ];
+
+    protected function relationCriador()
     {
         return $this->belongsTo(Usuario::class, self::CRIADOR_ID);
     }
 
     public function setCriador(string $id): void
     {
-        $this->criador()->associate(Usuario::where(Usuario::LOGIN, $id)->first());
+        $this->relationCriador()->associate(Usuario::where(Usuario::LOGIN, $id)->first());
+    }
+
+    public function getCriador(): CriadorProjeto
+    {
+        return new CriadorProjeto(
+            $this->relationCriador()->getAttribute(Usuario::LOGIN),
+            $this->relationCriador()->getAttribute(Usuario::NOME)
+        );
+    }
+
+    public function toEntity(): \Domain\Projeto\Projeto
+    {
+        $result = new \Domain\Projeto\Projeto(
+            $this->getAttribute(self::NOME),
+            $this->getAttribute(self::ATIVO),
+            $this->getCriador(),
+            $this->getAttribute(self::CRIADO_EM),
+            \Domain\Projeto\IdProjeto::restore($this->getKey())
+        );
+
+        $result->setDescricao($this->getAttribute(self::DESCRICAO));
+        $result->setOrcamento($this->getAttribute(self::ORCAMENTO_DISPONIVEL));
+
+        return $result;
     }
 }
