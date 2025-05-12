@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Usuario\Contracts;
+namespace App\Auth;
 
 use DateTimeInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
