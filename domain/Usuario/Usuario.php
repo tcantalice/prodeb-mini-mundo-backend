@@ -5,16 +5,16 @@ namespace Domain\Usuario;
 class Usuario
 {
     public function __construct(
-        private string $login,
+        private string $id,
         private string $nome,
         private string $email
     ) {
         //
     }
 
-    public function getLogin(): string
+    public function getId(): string
     {
-        return $this->login;
+        return $this->id;
     }
 
     public function getNome(): string
