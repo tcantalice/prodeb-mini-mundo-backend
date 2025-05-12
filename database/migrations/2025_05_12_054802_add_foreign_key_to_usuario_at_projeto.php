@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projeto', function (Blueprint $table) {
-            $table->foreignId('criado_por')->constrained('usuario', 'id', 'usuario_criador_projeto_fk');
+            $table->foreignId('usuario_criador_id')->constrained('usuario', 'id', 'usuario_criador_projeto_fk');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('projeto', function (Blueprint $table) {
-            $table->dropForeign('usuario_criador_projeto_fk');
+            $table->dropConstrainedForeignId('usuario_criador_id');
         });
     }
 };
