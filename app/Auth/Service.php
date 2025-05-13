@@ -2,11 +2,17 @@
 
 namespace App\Auth;
 
-use Domain\Usuario\Contracts\UsuarioRepository;
+use App\Auth\Contracts\AuthRepository;
+use Domain\Usuario\Usuario;
+use Illuminate\Support\Facades\Hash;
+use Psr\Log\LoggerInterface;
 
 class Service
 {
-    public function __construct(private UsuarioRepository $usuarioRepository) {
+    public function __construct(
+        private LoggerInterface $logger,
+        private AuthRepository $authRepository
+    ) {
         // Constructor logic if needed
     }
 
@@ -44,6 +50,28 @@ class Service
 
     public function isUser(string $login): bool
     {
-        return $this->usuarioRepository->existsByLogin($login);
+        return $this->authRepository->existsByLogin($login);
+    }
+
+    public function register(RegisterData $data)
+    {
+        if ($this->isUser($data->login)) {
+            // TODO: Lançar exceção mais específica
+        }
+
+        $usuario = new Usuario(
+            $data->login,
+            $data->nome,
+            $data->email
+        );
+
+        $senha = Hash::make($data->senha);
+
+        try {
+            $this->authRepository->save($usuario, $senha);
+        } catch(\Exception $e) {
+            $this->logger->error("Ocorreu um erro durante a chamado ao repositório: $e");
+            // TODO: Lançar exceçnao mais específica
+        }
     }
 }
