@@ -2,9 +2,11 @@
 
 namespace App\Auth;
 
+use Domain\Usuario\Contracts\UsuarioRepository;
+
 class Service
 {
-    public function __construct() {
+    public function __construct(private UsuarioRepository $usuarioRepository) {
         // Constructor logic if needed
     }
 
@@ -38,5 +40,10 @@ class Service
         } catch(\Tymon\JWTAuth\Exceptions\JWTException $jwte) {
             // TODO: Lançar uma exception mais específica
         }
+    }
+
+    public function isUser(string $login): bool
+    {
+        return $this->usuarioRepository->existsByLogin($login);
     }
 }
