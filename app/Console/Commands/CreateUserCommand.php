@@ -20,11 +20,11 @@ class CreateUserCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Cadastra um novo usuário';
 
     public function __construct(private AuthService $authService)
     {
-        //
+        parent::__construct();
     }
 
     /**
@@ -42,6 +42,8 @@ class CreateUserCommand extends Command
             $this->authService->register(new RegisterData(
                 $login, $this->argument('senha'), $this->argument('nome'), $this->argument('email')
             ));
+
+            $this->info('Usuário criado com sucesso!');
 
             return 0;
         } catch(\Exception $e) {
