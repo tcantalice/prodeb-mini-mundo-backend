@@ -27,6 +27,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www
 
 COPY . .
+COPY ./deploy/entrypoint .
+
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
@@ -34,7 +36,6 @@ RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 RUN a2enmod rewrite headers
 
 COPY ./deploy/apache.conf /etc/apache2/sites-available/000-default.conf
-COPY ./deploy/entrypoint .
 
 EXPOSE 80
 
@@ -42,4 +43,4 @@ ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV APP_TZ=America/Bahia
 
-ENTRYPOINT ./entrypoint
+ENTRYPOINT /var/www/entrypoint
