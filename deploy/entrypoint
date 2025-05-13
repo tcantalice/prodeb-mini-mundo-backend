@@ -4,4 +4,4 @@ php artisan migrate --force
 
 php artisan create:usuario Admin admin 123456 admin@email.com
 
-apache2-foregound
+apache2-foreground
