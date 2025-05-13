@@ -42,4 +42,4 @@ ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV APP_TZ=America/Bahia
 
-ENTRYPOINT entrypoint
+ENTRYPOINT ./entrypoint
