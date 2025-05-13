@@ -36,6 +36,7 @@ class CreateUserCommand extends Command
 
         if ($this->authService->isUser($login)) {
             $this->warn("Já existe um usuário $login");
+            return 1;
         }
 
         try {
