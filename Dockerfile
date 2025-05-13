@@ -19,7 +19,6 @@ RUN docker-php-ext-install \
     zip \
     pdo_mysql \
     pdo_pgsql \
-    pdo_sqlite \
     bcmath \
     opcache \
     mbstring
@@ -31,11 +30,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www
 
 # Copy only necessary files for production
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
-
-# Copy application code
 COPY . .
+RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
@@ -44,7 +40,7 @@ RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 RUN a2enmod rewrite headers
 
 # Copy Apache configuration
-COPY ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY ./deploy/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port 80
 EXPOSE 80
