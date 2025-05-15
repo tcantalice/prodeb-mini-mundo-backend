@@ -4,6 +4,8 @@ namespace Domain\Tarefa;
 
 use DateTime;
 use DateTimeInterface;
+use Domain\Tarefa\Exceptions\TarefaJaFinalizadaException;
+use Domain\Tarefa\Exceptions\TarefaJaIniciadaException;
 
 class Tarefa
 {
@@ -34,7 +36,7 @@ class Tarefa
     public function setDataInicio(DateTimeInterface $data)
     {
         if ($this->iniciadoEm !== null) {
-            //
+            throw new TarefaJaIniciadaException($this);
         }
 
         $this->iniciadoEm = $data;
@@ -43,7 +45,7 @@ class Tarefa
     public function setDataFim(DateTimeInterface $data)
     {
         if ($this->finalizadoEm !== null) {
-            //
+            throw new TarefaJaFinalizadaException($this);
         }
 
         $this->finalizadoEm = $data;
