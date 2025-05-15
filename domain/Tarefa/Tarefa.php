@@ -7,16 +7,23 @@ use DateTimeInterface;
 
 class Tarefa
 {
+    private ?IdTarefa $id;
     private ?DateTimeInterface $iniciadoEm;
     private ?DateTimeInterface $finalizadoEm;
     private ?TarefaDependenteList $tarefasDependentes;
 
+    private ?IdTarefa $dependenciaRef;
+
     public function __construct(
-        private String $projetoRef,
-        private String $descricao,
-        private ?String $tarefaDependente = null
+        private string $projetoRef,
+        private string $descricao,
+        ?IdTarefa $id,
+        ?IdTarefa $dependenciaRef = null,
     )
     {
+        $this->id = $id === null ? IdTarefa::generate() : $id;
+        $this->dependenciaRef = $dependenciaRef;
+
         $this->iniciadoEm = null;
         $this->finalizadoEm = null;
         $this->tarefasDependentes = null;
@@ -45,6 +52,11 @@ class Tarefa
         $this->tarefasDependentes = $tarefas;
     }
 
+    public function getID(): IdTarefa
+    {
+        return $this->id;
+    }
+
     public function iniciar()
     {
         $this->setDataInicio(new DateTime());
@@ -60,12 +72,12 @@ class Tarefa
         return $this->finalizadoEm !== null;
     }
 
-    public function getDescricao(): String
+    public function getDescricao(): string
     {
         return $this->descricao;
     }
 
-    public function getProjetoRef(): String
+    public function getProjetoRef(): string
     {
         return $this->projetoRef;
     }
@@ -83,6 +95,11 @@ class Tarefa
     public function tarefasDependentes(): ?TarefaDependenteList
     {
         return $this->tarefasDependentes;
+    }
+
+    public function getDependenciaRef(): ?IdTarefa
+    {
+        return $this->dependenciaRef;
     }
 
 }
