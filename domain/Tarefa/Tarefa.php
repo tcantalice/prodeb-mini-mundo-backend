@@ -17,6 +17,8 @@ class Tarefa
     public function __construct(
         private string $projetoRef,
         private string $descricao,
+        private string $criadoPor,
+        private DateTimeInterface $criadoEm,
         ?IdTarefa $id,
         ?IdTarefa $dependenciaRef = null,
     )
