@@ -2,7 +2,7 @@
 
 namespace Domain\Tarefa;
 
-class TarefasDependentes
+class TarefaDependenteList
 {
     /**
      * @var Tarefa[]
@@ -19,7 +19,7 @@ class TarefasDependentes
      */
     public function getTarefas(): array
     {
-        return [];
+        return $this->tarefas;
     }
 
     public function isEmpty()
