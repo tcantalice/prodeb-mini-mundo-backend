@@ -104,4 +104,14 @@ class Tarefa
         return $this->dependenciaRef;
     }
 
+    public function criadoEm(): DateTimeInterface
+    {
+        return $this->criadoEm;
+    }
+
+    public function criadoPor(): CriadorTarefa
+    {
+        return $this->criadoPor;
+    }
+
 }
