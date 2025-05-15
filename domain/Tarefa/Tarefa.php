@@ -9,7 +9,7 @@ class Tarefa
 {
     private ?DateTimeInterface $iniciadoEm;
     private ?DateTimeInterface $finalizadoEm;
-    private ?TarefasDependentes $tarefasDependentes;
+    private ?TarefaDependenteList $tarefasDependentes;
 
     public function __construct(
         private String $projetoRef,
@@ -40,7 +40,7 @@ class Tarefa
         $this->finalizadoEm = $data;
     }
 
-    public function setTarefasDependenetes(TarefasDependentes $tarefas)
+    public function setTarefasDependentes(TarefaDependenteList $tarefas)
     {
         $this->tarefasDependentes = $tarefas;
     }
@@ -75,12 +75,12 @@ class Tarefa
         return $this->iniciadoEm;
     }
 
-    public function finalizadoEm():? DateTimeInterface
+    public function finalizadoEm(): ?DateTimeInterface
     {
         return $this->finalizadoEm;
     }
 
-    public function tarefasDependentes(): ?TarefasDependentes
+    public function tarefasDependentes(): ?TarefaDependenteList
     {
         return $this->tarefasDependentes;
     }
