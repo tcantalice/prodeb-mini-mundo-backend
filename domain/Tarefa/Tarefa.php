@@ -114,4 +114,9 @@ class Tarefa
     {
         return $this->criadoPor;
     }
+
+    public function hasDependencia(): bool
+    {
+        return $this->dependeDe !== null;
+    }
 }
