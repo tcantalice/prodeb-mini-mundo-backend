@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Usuario;
+namespace App\Infraestructure\Eloquent\Usuario;
 
-use App\Repositories\Usuario\Usuario as Model;
+use App\Infraestructure\Eloquent\Usuario\Usuario as Model;
 use Domain\Usuario\Contracts\UsuarioRepository;
 use Domain\Usuario\Usuario;
 
@@ -22,5 +22,10 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
         }
 
         return $result;
+    }
+
+    public function existsByLogin(string $login): bool
+    {
+        return Model::where(Model::LOGIN, $login)->exists();
     }
 }

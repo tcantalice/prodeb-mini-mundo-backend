@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories\Tarefa;
+namespace App\Infraestructure\Eloquent\Tarefa;
 
-use App\Repositories\Projeto\Projeto;
-use App\Repositories\Usuario\Usuario;
+use App\Infraestructure\Eloquent\Projeto\Projeto;
+use App\Infraestructure\Eloquent\Usuario\Usuario;
 use Domain\Tarefa\CriadorTarefa;
 use Illuminate\Database\Eloquent\Model;
 

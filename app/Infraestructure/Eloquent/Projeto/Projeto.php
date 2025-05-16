@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Projeto;
+namespace App\Infraestructure\Eloquent\Projeto;
 
-use App\Repositories\Usuario\Usuario;
+use App\Infraestructure\Eloquent\Usuario\Usuario;
 use Domain\Projeto\CriadorProjeto;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Repositories\Auth;
+namespace App\Infraestructure\Database\Auth;
 
-use App\Auth\Contracts\AuthRepository;
-use App\Auth\User;
+use App\Auth\Contracts\AuthRepository as Contract;
 use Domain\Usuario\Usuario;
 use Illuminate\Support\Facades\DB;
 use Psr\Log\LoggerInterface;
 
-class AuthRepositoryDatabase implements AuthRepository
+class AuthRepository implements Contract
 {
     public function __construct(private LoggerInterface $logger)
     {
