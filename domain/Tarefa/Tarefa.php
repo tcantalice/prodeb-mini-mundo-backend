@@ -4,8 +4,10 @@ namespace Domain\Tarefa;
 
 use DateTime;
 use DateTimeInterface;
+use Domain\Tarefa\Exceptions\DependenciaNaoConcluidaException;
 use Domain\Tarefa\Exceptions\TarefaJaFinalizadaException;
 use Domain\Tarefa\Exceptions\TarefaJaIniciadaException;
+use Domain\Tarefa\Exceptions\TarefaNaoIniciadaException;
 
 class Tarefa
 {
@@ -63,7 +65,7 @@ class Tarefa
     public function iniciar()
     {
         if ($this->hasDependencia() && !$this->dependeDe()->isConcluida()) {
-            // TODO Lançar exceção de dependência não concluída ainda
+            throw new DependenciaNaoConcluidaException($this);
         }
 
         $this->setDataInicio(new DateTime());
@@ -72,7 +74,7 @@ class Tarefa
     public function finalizar()
     {
         if ($this->iniciadoEm() === null) {
-            // TODO Lancar exceção de tarefa ainda não iniciada
+            throw new TarefaNaoIniciadaException($this);
         }
 
         $this->setDataFim(new DateTime());
