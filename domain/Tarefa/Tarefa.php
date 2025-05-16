@@ -101,7 +101,7 @@ class Tarefa
         return $this->tarefasDependentes;
     }
 
-    public function getDependenciaRef(): ?IdTarefa
+    public function dependeDe(): ?IdTarefa
     {
         return $this->dependenciaRef;
     }
@@ -115,5 +115,4 @@ class Tarefa
     {
         return $this->criadoPor;
     }
-
 }
