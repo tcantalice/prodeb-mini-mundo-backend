@@ -18,7 +18,7 @@ class Tarefa extends Model
     public const DATA_HORA_FIM = 'data_hora_fim';
     public const CRIADOR_ID = 'usuario_criador_id';
     public const PROJETO_ID = 'projeto_id';
-    public const TAREFA_DEPENDENTE_ID = 'tarefa_dependente_id';
+    public const TAREFA_PREDECESSORA_ID = 'tarefa_predecessora_id';
     public const CRIADO_EM = 'criado_em';
 
     protected $table = 'tarefa';
@@ -47,7 +47,7 @@ class Tarefa extends Model
     public $with = [
         implode(',', 'relationCriador', Usuario::ID, Usuario::LOGIN, Usuario::NOME),
         implode(',', 'relationProjeto:', Projeto::ID),
-        implode(',', 'relationDependente: ', Tarefa::ID, Tarefa::UUID)
+        implode(',', 'relationTarefaPredecessora: ', Tarefa::ID, Tarefa::UUID)
     ];
 
     public function relationCriador()
@@ -60,9 +60,9 @@ class Tarefa extends Model
         return $this->belongsTo(Projeto::class, Projeto::ID);
     }
 
-    public function relationDependente()
+    public function relationTarefaPredecessora()
     {
-        return $this->belongsTo(Tarefa::class, self::TAREFA_DEPENDENTE_ID);
+        return $this->belongsTo(Tarefa::class, self::TAREFA_PREDECESSORA_ID);
     }
 
     public function setCriador(string $id)
@@ -88,10 +88,10 @@ class Tarefa extends Model
         return $this->relationProjeto->getAttribute(Projeto::ID);
     }
 
-    public function getDependenteRef(): ?string
+    public function getTarefaPredecessoraRef(): ?string
     {
-        return $this->relationDependente !== null
-            ? $this->relationDependente->getAttribute(self::UUID)
+        return $this->relationTarefaPredecessora !== null
+            ? $this->relationTarefaPredecessora->getAttribute(self::UUID)
             : null;
     }
 
