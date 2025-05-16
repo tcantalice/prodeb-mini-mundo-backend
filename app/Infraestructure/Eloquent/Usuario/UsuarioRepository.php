@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories\Usuario;
+namespace App\Infraestructure\Eloquent\Usuario;
 
-use App\Repositories\Usuario\Usuario as Model;
-use Domain\Usuario\Contracts\UsuarioRepository;
+use App\Infraestructure\Eloquent\Usuario\Usuario as Model;
+use Domain\Usuario\Contracts\UsuarioRepository as Contract;
 use Domain\Usuario\Usuario;
 
-class UsuarioRepositoryEloquent implements UsuarioRepository
+class UsuarioRepository implements Contract
 {
     public function findByLogin(string $login): ?Usuario
     {
@@ -22,5 +22,10 @@ class UsuarioRepositoryEloquent implements UsuarioRepository
         }
 
         return $result;
+    }
+
+    public function existsByLogin(string $login): bool
+    {
+        return Model::where(Model::LOGIN, $login)->exists();
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Repositories\Projeto;
+namespace App\Infraestructure\Eloquent\Projeto;
 
-use App\Repositories\Projeto\Projeto as Model;
+use App\Infraestructure\Eloquent\Projeto\Projeto as Model;
 use Domain\Projeto\Projeto;
 use Domain\Projeto\Contracts\ProjetoRepository as Contract;
 use Domain\Projeto\ProjetoFilter;
 use Psr\Log\LoggerInterface;
 
-class ProjetoRepositoryEloquent implements Contract
+class ProjetoRepository implements Contract
 {
     public function __construct(private LoggerInterface $logger)
     {
