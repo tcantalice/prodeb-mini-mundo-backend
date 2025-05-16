@@ -47,7 +47,7 @@ class Tarefa extends Model
     public $with = [
         implode(',', 'relationCriador', Usuario::ID, Usuario::LOGIN, Usuario::NOME),
         implode(',', 'relationProjeto:', Projeto::ID),
-        implode(',', 'relationTarefaPredecessora: ', Tarefa::ID, Tarefa::UUID)
+        implode(',', 'relationTarefaPredecessora: ', Tarefa::ID, Tarefa::UUID, Tarefa::DATA_HORA_FIM)
     ];
 
     public function relationCriador()
