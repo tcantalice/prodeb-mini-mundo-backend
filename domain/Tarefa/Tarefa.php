@@ -62,11 +62,19 @@ class Tarefa
 
     public function iniciar()
     {
+        if ($this->hasDependencia() && !$this->dependeDe()->isConcluida()) {
+            // TODO Lançar exceção de dependência não concluída ainda
+        }
+
         $this->setDataInicio(new DateTime());
     }
 
     public function finalizar()
     {
+        if ($this->iniciadoEm() === null) {
+            // TODO Lancar exceção de tarefa ainda não iniciada
+        }
+
         $this->setDataFim(new DateTime());
     }
 
