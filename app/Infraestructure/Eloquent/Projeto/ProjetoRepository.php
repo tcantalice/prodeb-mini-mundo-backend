@@ -8,7 +8,7 @@ use Domain\Projeto\Contracts\ProjetoRepository as Contract;
 use Domain\Projeto\ProjetoFilter;
 use Psr\Log\LoggerInterface;
 
-class ProjetoRepositoryEloquent implements Contract
+class ProjetoRepository implements Contract
 {
     public function __construct(private LoggerInterface $logger)
     {

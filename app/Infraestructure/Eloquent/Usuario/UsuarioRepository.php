@@ -3,10 +3,10 @@
 namespace App\Infraestructure\Eloquent\Usuario;
 
 use App\Infraestructure\Eloquent\Usuario\Usuario as Model;
-use Domain\Usuario\Contracts\UsuarioRepository;
+use Domain\Usuario\Contracts\UsuarioRepository as Contract;
 use Domain\Usuario\Usuario;
 
-class UsuarioRepositoryEloquent implements UsuarioRepository
+class UsuarioRepository implements Contract
 {
     public function findByLogin(string $login): ?Usuario
     {
