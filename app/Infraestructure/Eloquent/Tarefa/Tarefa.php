@@ -16,6 +16,7 @@ class Tarefa extends Model
     public const DATA_HORA_FIM = 'data_hora_fim';
     public const CRIADOR_ID = 'usuario_criador_id';
     public const PROJETO_ID = 'projeto_id';
+    public const TAREFA_DEPENDENCIA_ID = 'tarefa_dependencia_id';
     public const CRIADO_EM = 'criado_em';
 
     protected $table = 'tarefa';
