@@ -14,7 +14,7 @@ class Tarefa
     private ?DateTimeInterface $finalizadoEm;
     private ?TarefaDependenteList $tarefasDependentes;
 
-    private ?IdTarefa $dependenciaRef;
+    private ?TarefaPredecessora $dependeDe;
 
     public function __construct(
         private string $projetoRef,
@@ -22,10 +22,10 @@ class Tarefa
         private CriadorTarefa $criadoPor,
         private DateTimeInterface $criadoEm,
         ?IdTarefa $id,
-        ?TarefaPredecessora $dependenciaRef = null,
+        ?TarefaPredecessora $dependeDe = null,
     ) {
         $this->id = $id === null ? IdTarefa::generate() : $id;
-        $this->dependenciaRef = $dependenciaRef;
+        $this->dependeDe = $dependeDe;
 
         $this->iniciadoEm = null;
         $this->finalizadoEm = null;
@@ -102,7 +102,7 @@ class Tarefa
 
     public function dependeDe(): ?TarefaPredecessora
     {
-        return $this->dependenciaRef;
+        return $this->dependeDe;
     }
 
     public function criadoEm(): DateTimeInterface
