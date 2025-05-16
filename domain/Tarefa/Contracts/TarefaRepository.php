@@ -8,7 +8,7 @@ interface TarefaRepository
 {
     function save(Tarefa $tarefa): void;
 
-    function findAllByDependencia(string $dependenciaRef): array;
+    function findAllByTarefaDependente(string $tarefaRef): array;
 
     function findAllByProjeto(string $projetoRef): array;
 }
