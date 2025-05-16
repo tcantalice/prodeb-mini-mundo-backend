@@ -12,6 +12,7 @@ class Projeto extends Model
     use SoftDeletes;
 
     public const ID = 'id';
+    public const UUID = 'uuid';
     public const NOME = 'nome';
     public const DESCRICAO = 'descricao';
     public const ATIVO = 'ativo';
@@ -19,13 +20,14 @@ class Projeto extends Model
     public const CRIADO_EM = 'criado_em';
     public const CRIADOR_ID = 'usuario_criador_id';
 
+    public const DOMAIN_REF = self::UUID;
+    public const DATABASE_KEY = self::ID;
+
     protected $table = 'projeto';
 
     public $timestamps = false;
 
-    protected $keyType = 'string';
-
-    protected $primaryKey = 'id';
+    protected $primaryKey = self::ID;
 
     public $fillable = [
         self::NOME,
@@ -70,7 +72,7 @@ class Projeto extends Model
             $this->getAttribute(self::ATIVO),
             $this->getCriador(),
             $this->getAttribute(self::CRIADO_EM),
-            \Domain\Projeto\IdProjeto::restore($this->getKey())
+            \Domain\Projeto\IdProjeto::restore($this->getAttribute(self::DOMAIN_REF))
         );
 
         $result->setDescricao($this->getAttribute(self::DESCRICAO));
