@@ -5,6 +5,8 @@ namespace App\Infraestructure\Eloquent\Tarefa;
 use App\Infraestructure\Eloquent\Projeto\Projeto;
 use App\Infraestructure\Eloquent\Usuario\Usuario;
 use Domain\Tarefa\CriadorTarefa;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Tarefa extends Model
@@ -108,5 +110,17 @@ class Tarefa extends Model
         $result->setDataFim($this->getAttribute(self::DATA_HORA_FIM));
 
         return $result;
+    }
+
+    #[Scope]
+    protected function byProjeto(Builder $query, string $projetoRef)
+    {
+        $query->whereRelation('relationProjeto', Projeto::ID, $projetoRef);
+    }
+
+    #[Scope]
+    protected function byTarefaDependente(Builder $query, string $tarefaRef)
+    {
+        $query->whereRelation('relationDependente', self::UUID, $tarefaRef);
     }
 }
