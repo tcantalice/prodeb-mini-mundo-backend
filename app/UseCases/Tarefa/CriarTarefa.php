@@ -5,6 +5,7 @@ namespace App\UseCases\Tarefa;
 use Domain\Projeto\Contracts\ProjetoRepository;
 use Domain\Tarefa\Contracts\TarefaRepository;
 use Domain\Tarefa\CriadorTarefa;
+use Domain\Tarefa\Exceptions\TarefaNaoEncontradaException;
 use Domain\Tarefa\IdTarefa;
 use Domain\Tarefa\Tarefa;
 use Domain\Tarefa\TarefaPredecessora;
@@ -30,8 +31,9 @@ class CriarTarefa
 
         if ($input->refTarefaPredecessora !== null) {
             $tarefaPredecessoraEntity = $this->tarefaRepository->find($input->refTarefaPredecessora);
+
             if ($tarefaPredecessoraEntity === null) {
-                //
+                throw new TarefaNaoEncontradaException($input->refTarefaPredecessora);
             }
 
             $tarefaPredecessora = new TarefaPredecessora(
