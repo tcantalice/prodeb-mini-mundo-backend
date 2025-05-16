@@ -16,7 +16,7 @@ class Tarefa extends Model
     public const DATA_HORA_FIM = 'data_hora_fim';
     public const CRIADOR_ID = 'usuario_criador_id';
     public const PROJETO_ID = 'projeto_id';
-    public const TAREFA_DEPENDENCIA_ID = 'tarefa_dependencia_id';
+    public const TAREFA_DEPENDENTE_ID = 'tarefa_dependente_id';
     public const CRIADO_EM = 'criado_em';
 
     protected $table = 'tarefa';
@@ -44,7 +44,8 @@ class Tarefa extends Model
 
     public $with = [
         implode(',', 'relationCriador', Usuario::ID, Usuario::LOGIN, Usuario::NOME),
-        implode(',', 'relationProjeto:', Projeto::ID)
+        implode(',', 'relationProjeto:', Projeto::ID),
+        implode(',', 'relationDependente: ', Tarefa::ID, Tarefa::UUID)
     ];
 
     public function relationCriador()
@@ -55,6 +56,11 @@ class Tarefa extends Model
     public function relationProjeto()
     {
         return $this->belongsTo(Projeto::class, Projeto::ID);
+    }
+
+    public function relationDependente()
+    {
+        return $this->belongsTo(Tarefa::class, self::TAREFA_DEPENDENTE_ID);
     }
 
     public function setCriador(string $id)
@@ -80,6 +86,13 @@ class Tarefa extends Model
         return $this->relationProjeto->getAttribute(Projeto::ID);
     }
 
+    public function getDependenteRef(): ?string
+    {
+        return $this->relationDependente !== null
+            ? $this->relationDependente->getAttribute(self::UUID)
+            : null;
+    }
+
     public function toEntity(): \Domain\Tarefa\Tarefa
     {
         $result = new \Domain\Tarefa\Tarefa(
@@ -88,7 +101,7 @@ class Tarefa extends Model
             $this->getCriador(),
             $this->getAttribute(self::CRIADO_EM),
             $this->getAttribute(self::UUID),
-            null // TODO Alterar para o preenchimento com UUID da tarefa de referência
+            $this->getDependenteRef()
         );
 
         $result->setDataInicio($this->getAttribute(self::DATA_HORA_INICIO));
