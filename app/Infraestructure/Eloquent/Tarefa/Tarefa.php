@@ -36,7 +36,14 @@ class Tarefa extends Model
     ];
 
     protected $casts = [
+        self::DATA_HORA_INICIO => 'datetime',
+        self::DATA_HORA_FIM => 'datetime',
         self::CRIADO_EM => 'datetime'
+    ];
+
+    public $with = [
+        implode(',', 'relationCriador', Usuario::ID, Usuario::LOGIN, Usuario::NOME),
+        implode(',', 'relationProjeto:', Projeto::ID)
     ];
 
     public function relationCriador()
@@ -65,5 +72,10 @@ class Tarefa extends Model
             $this->relationCriador->getAttribute(Usuario::ID),
             $this->relationCriador->getAttribute(Usuario::NOME)
         );
+    }
+
+    public function getProjetoRef(): string
+    {
+        return $this->relationProjeto->getAttribute(Projeto::ID);
     }
 }
