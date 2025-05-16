@@ -5,6 +5,7 @@ namespace App\Infraestructure\Eloquent\Tarefa;
 use App\Infraestructure\Eloquent\Projeto\Projeto;
 use App\Infraestructure\Eloquent\Usuario\Usuario;
 use Domain\Tarefa\CriadorTarefa;
+use Domain\Tarefa\TarefaPredecessora;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -75,7 +76,7 @@ class Tarefa extends Model
         $this->relationProjeto()->associate(Projeto::where(Projeto::ID, $id)->first());
     }
 
-    public function getCriador(): CriadorTarefa
+    protected function getCriador(): CriadorTarefa
     {
         return new CriadorTarefa(
             $this->relationCriador->getAttribute(Usuario::ID),
@@ -83,16 +84,18 @@ class Tarefa extends Model
         );
     }
 
+    protected function getTarefaPredecessora(): ?TarefaPredecessora
+    {
+        return $this->relationTarefaPredecessora !== null
+            ? new TarefaPredecessora(
+                $this->relationTarefaPredecessora->getAttribute(Tarefa::UUID),
+                $this->relationTarefaPredecessora->getAttribute(Tarefa::DATA_HORA_FIM)
+            ) : null;
+    }
+
     public function getProjetoRef(): string
     {
         return $this->relationProjeto->getAttribute(Projeto::ID);
-    }
-
-    public function getTarefaPredecessoraRef(): ?string
-    {
-        return $this->relationTarefaPredecessora !== null
-            ? $this->relationTarefaPredecessora->getAttribute(self::UUID)
-            : null;
     }
 
     public function toEntity(): \Domain\Tarefa\Tarefa
@@ -103,7 +106,7 @@ class Tarefa extends Model
             $this->getCriador(),
             $this->getAttribute(self::CRIADO_EM),
             $this->getAttribute(self::UUID),
-            $this->getDependenteRef()
+            $this->getTarefaPredecessora()
         );
 
         $result->setDataInicio($this->getAttribute(self::DATA_HORA_INICIO));
