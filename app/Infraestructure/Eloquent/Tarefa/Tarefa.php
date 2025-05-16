@@ -22,13 +22,12 @@ class Tarefa extends Model
     public const TAREFA_PREDECESSORA_ID = 'tarefa_predecessora_id';
     public const CRIADO_EM = 'criado_em';
 
+    public const DOMAIN_REF = self::UUID;
+    public const DATABASE_KEY = self::ID;
+
     protected $table = 'tarefa';
 
     public $timestamps = false;
-
-    protected $keyType = 'int';
-
-    public $incrementing = true;
 
     protected $primaryKey = self::ID;
 
@@ -88,14 +87,14 @@ class Tarefa extends Model
     {
         return $this->relationTarefaPredecessora !== null
             ? new TarefaPredecessora(
-                $this->relationTarefaPredecessora->getAttribute(Tarefa::UUID),
+                $this->relationTarefaPredecessora->getAttribute(Tarefa::DOMAIN_REF),
                 $this->relationTarefaPredecessora->getAttribute(Tarefa::DATA_HORA_FIM)
             ) : null;
     }
 
     public function getProjetoRef(): string
     {
-        return $this->relationProjeto->getAttribute(Projeto::ID);
+        return $this->relationProjeto->getAttribute(Projeto::DOMAIN_REF);
     }
 
     public function toEntity(): \Domain\Tarefa\Tarefa
@@ -118,12 +117,12 @@ class Tarefa extends Model
     #[Scope]
     protected function byProjeto(Builder $query, string $projetoRef)
     {
-        $query->whereRelation('relationProjeto', Projeto::ID, $projetoRef);
+        $query->whereRelation('relationProjeto', Projeto::DOMAIN_REF, $projetoRef);
     }
 
     #[Scope]
     protected function byTarefaDependente(Builder $query, string $tarefaRef)
     {
-        $query->whereRelation('relationDependente', self::UUID, $tarefaRef);
+        $query->whereRelation('relationDependente', self::DOMAIN_REF, $tarefaRef);
     }
 }
