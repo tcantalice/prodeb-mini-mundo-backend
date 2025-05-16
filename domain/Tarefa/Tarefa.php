@@ -22,9 +22,8 @@ class Tarefa
         private CriadorTarefa $criadoPor,
         private DateTimeInterface $criadoEm,
         ?IdTarefa $id,
-        ?IdTarefa $dependenciaRef = null,
-    )
-    {
+        ?TarefaPredecessora $dependenciaRef = null,
+    ) {
         $this->id = $id === null ? IdTarefa::generate() : $id;
         $this->dependenciaRef = $dependenciaRef;
 
@@ -101,7 +100,7 @@ class Tarefa
         return $this->tarefasDependentes;
     }
 
-    public function dependeDe(): ?IdTarefa
+    public function dependeDe(): ?TarefaPredecessora
     {
         return $this->dependenciaRef;
     }
