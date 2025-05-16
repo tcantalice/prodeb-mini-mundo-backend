@@ -16,17 +16,13 @@ class CriarTarefa
 {
     public function __construct(
         private LoggerInterface $logger,
-        private ProjetoRepository $projetoRepository,
-        private TarefaRepository $tarefaRepository,
-        private UsuarioRepository $usuarioRepository
+        private TarefaRepository $tarefaRepository
     ) {
         //
     }
 
     public function execute(CriarTarefaDTO $input)
     {
-        // TODO: Validar referência ao projeto
-
         $tarefaPredecessora = null;
 
         if ($input->refTarefaPredecessora !== null) {
