@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Tarefa;
 
+use App\Repositories\Projeto\Projeto;
 use App\Repositories\Usuario\Usuario;
 use Domain\Tarefa\CriadorTarefa;
 use Illuminate\Database\Eloquent\Model;
@@ -43,9 +44,19 @@ class Tarefa extends Model
         return $this->belongsTo(Usuario::class, self::CRIADOR_ID);
     }
 
+    public function relationProjeto()
+    {
+        return $this->belongsTo(Projeto::class, Projeto::ID);
+    }
+
     public function setCriador(string $id)
     {
         $this->relationCriador()->associate(Usuario::where(Usuario::LOGIN, $id)->first());
+    }
+
+    public function setProjeto(string $id)
+    {
+        $this->relationProjeto()->associate(Projeto::where(Projeto::ID, $id)->first());
     }
 
     public function getCriador(): CriadorTarefa
