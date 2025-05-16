@@ -78,4 +78,21 @@ class Tarefa extends Model
     {
         return $this->relationProjeto->getAttribute(Projeto::ID);
     }
+
+    public function toEntity(): \Domain\Tarefa\Tarefa
+    {
+        $result = new \Domain\Tarefa\Tarefa(
+            $this->getProjetoRef(),
+            $this->relationCriador->getAttribute(self::DESCRICAO),
+            $this->getCriador(),
+            $this->getAttribute(self::CRIADO_EM),
+            $this->getAttribute(self::UUID),
+            null // TODO Alterar para o preenchimento com UUID da tarefa de referência
+        );
+
+        $result->setDataInicio($this->getAttribute(self::DATA_HORA_INICIO));
+        $result->setDataFim($this->getAttribute(self::DATA_HORA_FIM));
+
+        return $result;
+    }
 }
