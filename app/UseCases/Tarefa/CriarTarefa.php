@@ -2,14 +2,11 @@
 
 namespace App\UseCases\Tarefa;
 
-use Domain\Projeto\Contracts\ProjetoRepository;
 use Domain\Tarefa\Contracts\TarefaRepository;
 use Domain\Tarefa\CriadorTarefa;
 use Domain\Tarefa\Exceptions\TarefaNaoEncontradaException;
-use Domain\Tarefa\IdTarefa;
 use Domain\Tarefa\Tarefa;
 use Domain\Tarefa\TarefaPredecessora;
-use Domain\Usuario\Contracts\UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
 class CriarTarefa
@@ -52,6 +49,7 @@ class CriarTarefa
         } catch(\Throwable $th) {
             $this->logger->error("Um erro inesperado ocorreu: {$th->getMessage()}");
             // TODO Lançar exceção mais específica
+            throw $th;
         }
     }
 }
