@@ -8,9 +8,9 @@ use Domain\Tarefa\Tarefa;
 
 class TarefaRepository implements Contract
 {
-    public function findAllByDependencia(string $tarefaRef): array
+    public function findAllByDependencia(string $id): array
     {
-        return Model::byDependencia(tarefaRef: $tarefaRef)
+        return Model::byDependencia(tarefaRef: $id)
             ->orderBy(Model::CRIADO_EM)->get()
             ->map(fn (Model $item) => $item->toEntity())
             ->toArray();
@@ -28,5 +28,12 @@ class TarefaRepository implements Contract
     public function save(Tarefa $tarefa): void
     {
 
+    }
+
+    public function find(string $id): ?Tarefa
+    {
+        $queryResult = Model::where(Model::DOMAIN_REF, $id)->first();
+
+        return $queryResult ? $queryResult->toEntity() : null;
     }
 }
