@@ -6,6 +6,7 @@ use App\Api\Requests\Tarefa\CriarTarefaRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
 use App\UseCases\Tarefa\CriarTarefa;
 use App\UseCases\Tarefa\CriarTarefaDTO;
+use Illuminate\Support\Facades\Auth;
 
 class TarefaController extends Controller
 {
@@ -26,14 +27,14 @@ class TarefaController extends Controller
             $criarTarefaUseCase->execute(new CriarTarefaDTO(
                 $request->input('descricao'),
                 $idProjeto,
-                auth()->user()->getAuthIdentifier(),
+                Auth::user()->getAuthIdentifier(),
                 $request->input('depende_de')
             ));
 
             return $this->makeSuccessResponse(statusCode: 201);
         } catch(\Throwable $th) {
             $this->logger->error($th->getMessage());
-            return response()->json(['message' => 'Erro ao atualizar projeto'], 500);
+            return response()->json(['message' => 'Erro ao cadastrar tarefa'], 500);
         }
     }
 }
