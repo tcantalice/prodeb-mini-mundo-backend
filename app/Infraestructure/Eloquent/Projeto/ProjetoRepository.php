@@ -26,7 +26,7 @@ class ProjetoRepository implements Contract
                 Model::CRIADO_EM => $projeto->criadoEm(),
             ]);
 
-            $model->setAttribute(Model::ID, $projeto->getID()->valor);
+            $model->setAttribute(Model::UUID, $projeto->getID()->valor);
             $model->setCriador($projeto->criadoPor()->getRef());
         } else {
             $model = Model::find($projeto->getID()->valor);
@@ -51,7 +51,7 @@ class ProjetoRepository implements Contract
         /**
          * @var Model $queryResult
          */
-        $queryResult = Model::find($id);
+        $queryResult = Model::where(Model::DOMAIN_REF, $id)->first();
 
         return $queryResult !== null ? $queryResult->toEntity() : null;
     }
