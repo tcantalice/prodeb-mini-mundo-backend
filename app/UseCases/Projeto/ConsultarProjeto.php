@@ -21,7 +21,7 @@ class ConsultarProjeto
         $projeto = $this->projetoRepo->find($id);
 
         if ($projeto === null) {
-            throw new \Domain\Projeto\Exceptions\ProjetoNaoEncontradoException();
+            throw new \Domain\Projeto\Exceptions\ProjetoNaoEncontradoException($id);
         }
 
         return new ProjetoDTO(
