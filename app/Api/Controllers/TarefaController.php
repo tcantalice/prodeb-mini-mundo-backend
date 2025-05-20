@@ -33,7 +33,6 @@ class TarefaController extends Controller
 
             return $this->makeSuccessResponse(statusCode: 201);
         } catch(\Throwable $th) {
-            $this->logger->error($th->getMessage());
             return response()->json(['message' => 'Erro ao cadastrar tarefa'], 500);
         }
     }
