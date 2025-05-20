@@ -5,7 +5,7 @@ namespace App\Api\Controllers;
 use App\Api\Requests\Tarefa\CriarTarefaRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
 use App\UseCases\Tarefa\CriarTarefa;
-use App\UseCases\Tarefa\CriarTarefaDTO;
+use App\UseCases\Tarefa\CriarTarefaInput;
 use App\UseCases\Tarefa\ListarTarefasProjeto;
 use App\UseCases\Tarefa\TarefaOutput;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +26,7 @@ class TarefaController extends Controller
         try {
             $consultarProjetoUseCase->execute($idProjeto);
 
-            $criarTarefaUseCase->execute(new CriarTarefaDTO(
+            $criarTarefaUseCase->execute(new CriarTarefaInput(
                 $request->input('descricao'),
                 $idProjeto,
                 Auth::user()->getAuthIdentifier(),
