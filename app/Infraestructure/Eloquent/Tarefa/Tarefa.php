@@ -44,10 +44,10 @@ class Tarefa extends Model
         self::CRIADO_EM => 'datetime'
     ];
 
-    public $with = [
-        implode(',', 'relationCriador', Usuario::ID, Usuario::LOGIN, Usuario::NOME),
-        implode(',', 'relationProjeto:', Projeto::ID),
-        implode(',', 'relationTarefaPredecessora: ', Tarefa::ID, Tarefa::UUID, Tarefa::DATA_HORA_FIM)
+    protected $with = [
+        'relationCriador:'.Usuario::ID.','.Usuario::LOGIN.','.Usuario::NOME,
+        'relationProjeto:'.Projeto::DATABASE_KEY.','.Projeto::DOMAIN_REF,
+        'relationTarefaPredecessora:'.Tarefa::DATABASE_KEY.','.Tarefa::DOMAIN_REF.','.Tarefa::DATA_HORA_FIM
     ];
 
     public function relationCriador()
@@ -57,12 +57,12 @@ class Tarefa extends Model
 
     public function relationProjeto()
     {
-        return $this->belongsTo(Projeto::class, Projeto::ID);
+        return $this->belongsTo(Projeto::class, self::PROJETO_ID);
     }
 
     public function relationTarefaPredecessora()
     {
-        return $this->belongsTo(Tarefa::class, self::TAREFA_PREDECESSORA_ID);
+        return $this->belongsTo(self::class, self::TAREFA_PREDECESSORA_ID);
     }
 
     public function setCriador(string $id)
@@ -72,7 +72,13 @@ class Tarefa extends Model
 
     public function setProjeto(string $id)
     {
-        $this->relationProjeto()->associate(Projeto::where(Projeto::ID, $id)->first());
+        $this->relationProjeto()->associate(Projeto::where(Projeto::DOMAIN_REF, $id)->first());
+    }
+
+    public function setTarefaPredecessora(string $id)
+    {
+        $this->relationTarefaPredecessora()
+            ->associate(self::where(self::DOMAIN_REF, $id)->first());
     }
 
     protected function getCriador(): CriadorTarefa
@@ -121,8 +127,8 @@ class Tarefa extends Model
     }
 
     #[Scope]
-    protected function byTarefaDependente(Builder $query, string $tarefaRef)
+    protected function byTarefaPredecessora(Builder $query, string $tarefaRef)
     {
-        $query->whereRelation('relationDependente', self::DOMAIN_REF, $tarefaRef);
+        $query->whereRelation('relationTarefaPredecessora', self::DOMAIN_REF, $tarefaRef);
     }
 }
