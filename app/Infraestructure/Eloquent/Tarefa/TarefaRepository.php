@@ -35,6 +35,7 @@ class TarefaRepository implements Contract
         $model = new Model([
             Model::UUID => $tarefa->getID()->valor,
             Model::DESCRICAO => $tarefa->getDescricao(),
+            Model::CRIADO_EM => $tarefa->criadoEm()
         ]);
 
         $model->setAttribute(Model::DOMAIN_REF, $tarefa->getID()->valor);
