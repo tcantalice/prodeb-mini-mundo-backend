@@ -62,7 +62,7 @@ class Tarefa extends Model
 
     public function relationTarefaPredecessora()
     {
-        return $this->belongsTo(Tarefa::class, self::TAREFA_PREDECESSORA_ID);
+        return $this->belongsTo(self::class, self::TAREFA_PREDECESSORA_ID);
     }
 
     public function setCriador(string $id)
@@ -78,7 +78,7 @@ class Tarefa extends Model
     public function setTarefaPredecessora(string $id)
     {
         $this->relationTarefaPredecessora()
-            ->associate(Tarefa::where(self::DOMAIN_REF, $id)->first());
+            ->associate(self::where(self::DOMAIN_REF, $id)->first());
     }
 
     protected function getCriador(): CriadorTarefa
@@ -127,8 +127,8 @@ class Tarefa extends Model
     }
 
     #[Scope]
-    protected function byTarefaDependente(Builder $query, string $tarefaRef)
+    protected function byTarefaPredecessora(Builder $query, string $tarefaRef)
     {
-        $query->whereRelation('relationDependente', self::DOMAIN_REF, $tarefaRef);
+        $query->whereRelation('relationTarefaPredecessora', self::DOMAIN_REF, $tarefaRef);
     }
 }
