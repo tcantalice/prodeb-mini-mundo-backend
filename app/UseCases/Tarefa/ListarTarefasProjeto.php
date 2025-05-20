@@ -22,7 +22,7 @@ class ListarTarefasProjeto
                 $entity->criadoEm(),
                 $entity->iniciadoEm(),
                 $entity->finalizadoEm(),
-                $entity->dependeDe()->getRef() ?? null
+                $entity->dependeDe() ? $entity->dependeDe()->getRef() : null
             );
         }, $this->repository->findAllByProjeto($projetoRef));
     }
