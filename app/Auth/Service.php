@@ -41,10 +41,13 @@ class Service
             auth()->setToken($token)->checkOrFail();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $tee) {
             // TODO: Lançar uma exception mais específica
+            throw $tee;
         } catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $tie) {
             // TODO: Lançar uma exception mais específica
+            throw $tie;
         } catch(\Tymon\JWTAuth\Exceptions\JWTException $jwte) {
             // TODO: Lançar uma exception mais específica
+            throw $jwte;
         }
     }
 
