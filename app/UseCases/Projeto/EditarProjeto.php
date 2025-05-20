@@ -15,12 +15,12 @@ class EditarProjeto
         //
     }
 
-    public function execute(EditarProjetoDTO $input)
+    public function execute(EditarProjetoInput $input)
     {
         $projeto = $this->projetoRepo->find($input->id);
 
         if ($projeto === null) {
-            throw new ProjetoNaoEncontradoException();
+            throw new ProjetoNaoEncontradoException($input->id);
         }
 
         if ($input->nome !== null) {

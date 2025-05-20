@@ -2,7 +2,7 @@
 
 namespace App\UseCases\Projeto;
 
-class EditarProjetoDTO
+class EditarProjetoInput
 {
     public function __construct(
         public String $id,
