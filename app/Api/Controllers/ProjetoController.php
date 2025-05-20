@@ -70,13 +70,13 @@ class ProjetoController extends Controller
 
         return $this->makeSuccessResponse(
             collect($projetos)->map(function (ProjetoDTO $projeto) {
-                return [
-                    'id' => $projeto->id,
-                    'nome' => $projeto->nome,
-                    'criado_em' => $this->serializeDateTime($projeto->criadoEm),
-                    'criado_por' => [
-                        'id' => $projeto->criadoPor->ref,
-                        'nome' => $projeto->criadoPor->nome,
+                return [ // TODO: Padronizar chaves de array com aspas duplas
+                    "id" => $projeto->id,
+                    "nome" => $projeto->nome,
+                    "criado_em" => $this->serializeDateTime($projeto->criadoEm),
+                    "criado_por" => [
+                        "id" => $projeto->criadoPor->ref,
+                        "nome" => $projeto->criadoPor->nome,
                     ],
                 ];
             })->toArray()
@@ -91,19 +91,19 @@ class ProjetoController extends Controller
             $projeto = $consultarProjetoUseCase->execute($id);
         } catch (\Throwable $th) {
             $this->logger->error('Erro ao consultar projeto: ' . $th->getMessage());
-            return response()->json(['message' => 'Erro ao consultar projeto'], 500);
+            return response()->json(["message" => 'Erro ao consultar projeto'], 500);
         }
 
         return $this->makeSuccessResponse(
             [
-                'id' => $projeto->id,
-                'nome' => $projeto->nome,
-                'descricao' => $projeto->descricao,
-                'orcamento' => $projeto->orcamento,
-                'criado_em' => $this->serializeDateTime($projeto->criadoEm),
-                'criado_por' => [
-                    'id' => $projeto->criadoPor->ref,
-                    'nome' => $projeto->criadoPor->nome,
+                "id" => $projeto->id,
+                "nome" => $projeto->nome,
+                "descricao" => $projeto->descricao,
+                "orcamento" => $projeto->orcamento,
+                "criado_em" => $this->serializeDateTime($projeto->criadoEm),
+                "criado_por" => [
+                    "id" => $projeto->criadoPor->ref,
+                    "nome" => $projeto->criadoPor->nome,
                 ],
             ]
         );
