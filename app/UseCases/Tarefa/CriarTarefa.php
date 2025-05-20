@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Tarefa;
 
+use App\Exceptions\FalhaInternaException;
 use Domain\Tarefa\Contracts\TarefaRepository;
 use Domain\Tarefa\CriadorTarefa;
 use Domain\Tarefa\Exceptions\TarefaNaoEncontradaException;
@@ -22,12 +23,9 @@ class CriarTarefa
     {
         $tarefaPredecessora = null;
 
-        if ($input->refTarefaPredecessora !== null) {
-            $tarefaPredecessoraEntity = $this->tarefaRepository->find($input->refTarefaPredecessora);
-
-            if ($tarefaPredecessoraEntity === null) {
-                throw new TarefaNaoEncontradaException($input->refTarefaPredecessora);
-            }
+        if ($input->refTarefaPredecessora) {
+            $tarefaPredecessoraEntity = $this->tarefaRepository->find($input->refTarefaPredecessora)
+                ?? throw new TarefaNaoEncontradaException($input->refTarefaPredecessora);
 
             $tarefaPredecessora = new TarefaPredecessora(
                 $tarefaPredecessoraEntity->getID(),
@@ -47,9 +45,12 @@ class CriarTarefa
         try {
             $this->tarefaRepository->save($tarefa);
         } catch(\Throwable $th) {
-            $this->logger->error("Um erro inesperado ocorreu: {$th->getMessage()}");
-            // TODO Lançar exceção mais específica
-            throw $th;
+            $this->logger->error($th->getMessage(), [
+                "projeto" => $input->refProjeto,
+                "use_case" => self::class
+            ]);
+
+            throw new FalhaInternaException($th);
         }
     }
 }
