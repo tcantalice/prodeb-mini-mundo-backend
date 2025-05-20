@@ -2,7 +2,7 @@
 
 namespace App\UseCases\Projeto;
 
-class CriarProjetoDTO
+class CriarProjetoInput
 {
     public function __construct(
         public readonly String $nome,

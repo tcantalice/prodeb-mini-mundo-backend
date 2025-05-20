@@ -13,10 +13,10 @@ class ListarProjetos
 
     public function execute(): array
     {
-        $result = $this->repository->findAll();
+        $result = $this->repository->findAll(); // TODO: Remover declaração da variável
 
         return array_map(function (Projeto $entity) {
-            return new ProjetoDTO(
+            return new ProjetoOutput(
                 $entity->getID()->valor,
                 $entity->getNome(),
                 $entity->getDescricao(),

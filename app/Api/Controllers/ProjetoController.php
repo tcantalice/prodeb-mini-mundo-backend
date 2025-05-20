@@ -6,11 +6,11 @@ use App\Api\Requests\Projeto\CriarProjetoRequest;
 use App\Api\Requests\Projeto\EditarProjetoRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
 use App\UseCases\Projeto\CriarProjeto;
-use App\UseCases\Projeto\CriarProjetoDTO;
+use App\UseCases\Projeto\CriarProjetoInput;
 use App\UseCases\Projeto\EditarProjeto;
-use App\UseCases\Projeto\EditarProjetoDTO;
+use App\UseCases\Projeto\EditarProjetoInput;
 use App\UseCases\Projeto\ListarProjetos;
-use App\UseCases\Projeto\ProjetoDTO;
+use App\UseCases\Projeto\ProjetoOutput;
 use Illuminate\Support\Facades\Auth;
 use Psr\Log\LoggerInterface;
 
@@ -23,19 +23,14 @@ class ProjetoController extends Controller
 
     public function create(CriarProjetoRequest $request, CriarProjeto $criarProjetoUseCase)
     {
-        $this->logger->info('Criando projeto');
-
-        $useCaseInputData = new CriarProjetoDTO(
+        $useCaseInputData = new CriarProjetoInput(
             $request->input('nome'),
             Auth::user()->getAuthIdentifier(),
             $request->input('descricao'),
             $request->input('orcamento')
         );
 
-        // TODO: Adicionar tratamento de exceções
         $criarProjetoUseCase->execute($useCaseInputData);
-
-        $this->logger->info('Projeto criado com sucesso');
 
         return $this->makeSuccessResponse(statusCode: 201);
     }
@@ -44,7 +39,7 @@ class ProjetoController extends Controller
     {
         $this->logger->info('Atualizando projeto');
 
-        $useCaseInputData = new EditarProjetoDTO(
+        $useCaseInputData = new EditarProjetoInput(
             $idProjeto,
             $request->input('nome'),
             $request->input('descricao'),
@@ -56,7 +51,7 @@ class ProjetoController extends Controller
             $editarProjetoUseCase->execute($useCaseInputData);
         } catch (\Throwable $th) {
             $this->logger->error('Erro ao atualizar projeto: ' . $th->getMessage());
-            return response()->json(['message' => 'Erro ao atualizar projeto'], 500);
+            return response()->json(["message" => 'Erro ao atualizar projeto'], 500);
         }
 
         return $this->makeSuccessResponse(statusCode: 200);
@@ -69,14 +64,14 @@ class ProjetoController extends Controller
         $projetos = $listarProjetosUseCase->execute();
 
         return $this->makeSuccessResponse(
-            collect($projetos)->map(function (ProjetoDTO $projeto) {
+            collect($projetos)->map(function (ProjetoOutput $projeto) {
                 return [
-                    'id' => $projeto->id,
-                    'nome' => $projeto->nome,
-                    'criado_em' => $this->serializeDateTime($projeto->criadoEm),
-                    'criado_por' => [
-                        'id' => $projeto->criadoPor->ref,
-                        'nome' => $projeto->criadoPor->nome,
+                    "id" => $projeto->id,
+                    "nome" => $projeto->nome,
+                    "criado_em" => $this->serializeDateTime($projeto->criadoEm),
+                    "criado_por" => [
+                        "id" => $projeto->criadoPor->ref,
+                        "nome" => $projeto->criadoPor->nome,
                     ],
                 ];
             })->toArray()
@@ -91,19 +86,19 @@ class ProjetoController extends Controller
             $projeto = $consultarProjetoUseCase->execute($id);
         } catch (\Throwable $th) {
             $this->logger->error('Erro ao consultar projeto: ' . $th->getMessage());
-            return response()->json(['message' => 'Erro ao consultar projeto'], 500);
+            return response()->json(["message" => 'Erro ao consultar projeto'], 500);
         }
 
         return $this->makeSuccessResponse(
             [
-                'id' => $projeto->id,
-                'nome' => $projeto->nome,
-                'descricao' => $projeto->descricao,
-                'orcamento' => $projeto->orcamento,
-                'criado_em' => $this->serializeDateTime($projeto->criadoEm),
-                'criado_por' => [
-                    'id' => $projeto->criadoPor->ref,
-                    'nome' => $projeto->criadoPor->nome,
+                "id" => $projeto->id,
+                "nome" => $projeto->nome,
+                "descricao" => $projeto->descricao,
+                "orcamento" => $projeto->orcamento,
+                "criado_em" => $this->serializeDateTime($projeto->criadoEm),
+                "criado_por" => [
+                    "id" => $projeto->criadoPor->ref,
+                    "nome" => $projeto->criadoPor->nome,
                 ],
             ]
         );

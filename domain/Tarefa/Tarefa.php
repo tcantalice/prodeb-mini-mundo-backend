@@ -34,22 +34,26 @@ class Tarefa
         $this->tarefasDependentes = null;
     }
 
-    public function setDataInicio(DateTimeInterface $data)
+    public function setDataInicio(?DateTimeInterface $data)
     {
         if ($this->iniciadoEm !== null) {
             throw new TarefaJaIniciadaException($this);
         }
 
-        $this->iniciadoEm = $data;
+        if ($data !== null) {
+            $this->iniciadoEm = $data;
+        }
     }
 
-    public function setDataFim(DateTimeInterface $data)
+    public function setDataFim(?DateTimeInterface $data)
     {
         if ($this->finalizadoEm !== null) {
             throw new TarefaJaFinalizadaException($this);
         }
 
-        $this->finalizadoEm = $data;
+        if ($data !== null) {
+            $this->finalizadoEm = $data;
+        }
     }
 
     public function setTarefasDependentes(TarefaDependenteList $tarefas)

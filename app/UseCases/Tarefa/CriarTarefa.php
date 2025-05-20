@@ -19,7 +19,7 @@ class CriarTarefa
         //
     }
 
-    public function execute(CriarTarefaDTO $input)
+    public function execute(CriarTarefaInput $input)
     {
         $tarefaPredecessora = null;
 

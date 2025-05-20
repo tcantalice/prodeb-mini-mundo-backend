@@ -5,6 +5,7 @@ namespace App\Infraestructure\Eloquent\Tarefa;
 use App\Infraestructure\Eloquent\Projeto\Projeto;
 use App\Infraestructure\Eloquent\Usuario\Usuario;
 use Domain\Tarefa\CriadorTarefa;
+use Domain\Tarefa\IdTarefa;
 use Domain\Tarefa\TarefaPredecessora;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -107,10 +108,10 @@ class Tarefa extends Model
     {
         $result = new \Domain\Tarefa\Tarefa(
             $this->getProjetoRef(),
-            $this->relationCriador->getAttribute(self::DESCRICAO),
+            $this->getAttribute(self::DESCRICAO),
             $this->getCriador(),
             $this->getAttribute(self::CRIADO_EM),
-            $this->getAttribute(self::UUID),
+            IdTarefa::restore($this->getAttribute(self::UUID)),
             $this->getTarefaPredecessora()
         );
 

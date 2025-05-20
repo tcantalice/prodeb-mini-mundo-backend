@@ -2,10 +2,10 @@
 
 namespace App\UseCases\Projeto;
 
-class ProjetoDTO
+class ProjetoOutput
 {
     public function __construct(
-        public readonly String $id,
+        public readonly string $id,
         public readonly string $nome,
         public readonly ?string $descricao,
         public readonly ?float $orcamento,

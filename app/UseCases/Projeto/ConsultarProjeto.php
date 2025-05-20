@@ -14,7 +14,7 @@ class ConsultarProjeto
         //
     }
 
-    public function execute(string $id): ProjetoDTO
+    public function execute(string $id): ProjetoOutput
     {
         $this->logger->info('Consultando projeto com ID: ' . $id);
 
@@ -24,7 +24,7 @@ class ConsultarProjeto
             throw new \Domain\Projeto\Exceptions\ProjetoNaoEncontradoException($id);
         }
 
-        return new ProjetoDTO(
+        return new ProjetoOutput(
             $projeto->getID()->valor,
             $projeto->getNome(),
             $projeto->getDescricao(),

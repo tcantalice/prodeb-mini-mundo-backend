@@ -17,7 +17,7 @@ class CriarProjeto
         //
     }
 
-    public function execute(CriarProjetoDTO $input)
+    public function execute(CriarProjetoInput $input)
     {
         if ($this->projetoRepo->existsByNome($input->nome)) {
             throw new NomeJaExisteException();
