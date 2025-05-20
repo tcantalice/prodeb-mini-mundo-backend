@@ -2,7 +2,7 @@
 
 namespace App\UseCases\Tarefa;
 
-class CriarTarefaDTO
+class CriarTarefaInput
 {
     public function __construct(
         public readonly string $descricao,
