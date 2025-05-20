@@ -15,7 +15,7 @@ class TarefaRepository implements Contract
     }
     public function findAllByDependencia(string $id): array
     {
-        return Model::byDependencia(tarefaRef: $id)
+        return Model::byTarefaPredecessora(tarefaRef: $id)
             ->orderBy(Model::CRIADO_EM)->get()
             ->map(fn (Model $item) => $item->toEntity())
             ->toArray();
