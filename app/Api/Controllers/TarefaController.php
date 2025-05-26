@@ -4,6 +4,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\Tarefa\CriarTarefaRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
+use App\UseCases\Tarefa\AlterarStatus;
 use App\UseCases\Tarefa\CriarTarefa;
 use App\UseCases\Tarefa\CriarTarefaInput;
 use App\UseCases\Tarefa\ListarTarefasProjeto;
@@ -47,13 +48,23 @@ class TarefaController extends Controller
             return [
                 "id" => $tarefa->id,
                 "descricao" => $tarefa->descricao,
-                "projeto" => $tarefa->projetoRef,
-                "status" => [
-                    "iniciado" => $tarefa->dataInicio !== null,
-                    "finalizado" => $tarefa->dataFim !== null,
-                ],
-                "tarefa_predecessora" => $tarefa->dependeDe
+                "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
+                "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
+                "depende_de" => $tarefa->dependeDe
             ];
         })->toArray());
+    }
+
+    public function changeStatus(string $tarefaId, AlterarStatus $alterarStatusUseCase)
+    {
+        $tarefa = $alterarStatusUseCase->execute($tarefaId);
+
+        return $this->makeSuccessResponse([
+            "id" => $tarefa->id,
+            "descricao" => $tarefa->descricao,
+            "iniciado_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
+            "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
+            "depende_de" => $tarefa->dependeDe
+        ]);
     }
 }
