@@ -77,7 +77,7 @@ class Tarefa
 
     public function finalizar()
     {
-        if ($this->iniciadoEm() === null) {
+        if (!$this->isIniciada()) {
             throw new TarefaNaoIniciadaException($this);
         }
 
