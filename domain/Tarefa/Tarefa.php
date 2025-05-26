@@ -84,6 +84,11 @@ class Tarefa
         $this->setDataFim(new DateTime());
     }
 
+    public function isIniciada(): bool
+    {
+        return $this->iniciadoEm !== null;
+    }
+
     public function isConcluida(): bool
     {
         return $this->finalizadoEm !== null;
