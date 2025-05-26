@@ -13,7 +13,7 @@ class AlterarStatus
         //
     }
 
-    public function execute(string $id)
+    public function execute(string $id): TarefaOutput
     {
         $tarefa = $this->tarefaRepository->find($id);
 
@@ -21,12 +21,18 @@ class AlterarStatus
             throw new TarefaNaoEncontradaException($id);
         }
 
-        if ($tarefa->isConcluida()) {
-            throw new TarefaJaFinalizadaException($tarefa);
-        }
-
         $tarefa->isIniciada() ? $tarefa->finalizar() : $tarefa->iniciar();
 
         $this->tarefaRepository->save($tarefa);
+
+        return new TarefaOutput(
+            $tarefa->getID()->valor,
+            $tarefa->getDescricao(),
+            $tarefa->getProjetoRef(),
+            $tarefa->criadoEm(),
+            $tarefa->iniciadoEm(),
+            $tarefa->finalizadoEm(),
+            $tarefa->dependeDe()->getRef(),
+        );
     }
 }
