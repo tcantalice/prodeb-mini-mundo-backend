@@ -20,6 +20,8 @@ Route::middleware('api')
 
             Route::post('/projetos/{idProjeto}/tarefas', [TarefaController::class, 'create']);
             Route::get('/projetos/{idProjeto}/tarefas', [TarefaController::class, 'listByProjeto']);
+
+            Route::patch('/tarefas/{idTarefa}/status', [TarefaController::class, 'changeStatus']);
         });
 
     });

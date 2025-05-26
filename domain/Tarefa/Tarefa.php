@@ -77,11 +77,16 @@ class Tarefa
 
     public function finalizar()
     {
-        if ($this->iniciadoEm() === null) {
+        if (!$this->isIniciada()) {
             throw new TarefaNaoIniciadaException($this);
         }
 
         $this->setDataFim(new DateTime());
+    }
+
+    public function isIniciada(): bool
+    {
+        return $this->iniciadoEm !== null;
     }
 
     public function isConcluida(): bool

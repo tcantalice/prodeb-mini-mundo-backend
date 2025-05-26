@@ -32,16 +32,25 @@ class TarefaRepository implements Contract
 
     public function save(Tarefa $tarefa): void
     {
-        $model = new Model([
-            Model::UUID => $tarefa->getID()->valor,
-            Model::DESCRICAO => $tarefa->getDescricao(),
-            Model::CRIADO_EM => $tarefa->criadoEm()
-        ]);
+        if ($tarefa->getID()->isNovo()) {
+            $model = new Model([
+                Model::UUID => $tarefa->getID()->valor,
+                Model::DESCRICAO => $tarefa->getDescricao(),
+                Model::CRIADO_EM => $tarefa->criadoEm()
+            ]);
 
-        $model->setAttribute(Model::DOMAIN_REF, $tarefa->getID()->valor);
+            $model->setAttribute(Model::DOMAIN_REF, $tarefa->getID()->valor);
 
-        $model->setCriador($tarefa->criadoPor()->getRef());
-        $model->setProjeto($tarefa->getProjetoRef());
+            $model->setCriador($tarefa->criadoPor()->getRef());
+            $model->setProjeto($tarefa->getProjetoRef());
+
+        } else {
+            $model = Model::where(Model::DOMAIN_REF, $tarefa->getID()->valor)->first();
+
+            $model->setAttribute(Model::DESCRICAO, $tarefa->getDescricao());
+            $model->setAttribute(Model::DATA_HORA_INICIO, $tarefa->iniciadoEm());
+            $model->setAttribute(Model::DATA_HORA_FIM, $tarefa->finalizadoEm());
+        }
 
         if ($tarefa->hasDependencia()) {
             $model->setTarefaPredecessora($tarefa->dependeDe()->getRef()->valor);
