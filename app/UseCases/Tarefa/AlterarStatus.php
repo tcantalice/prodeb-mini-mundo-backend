@@ -32,7 +32,7 @@ class AlterarStatus
             $tarefa->criadoEm(),
             $tarefa->iniciadoEm(),
             $tarefa->finalizadoEm(),
-            $tarefa->dependeDe()->getRef(),
+            $tarefa->dependeDe()?->getRef(),
         );
     }
 }
