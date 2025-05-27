@@ -1,0 +1,35 @@
+# PRODEB - Mini Mundo
+
+# Variáveis de Ambiente
+
+| Variável | Valores Aceitos | Obrigatório |
+|----------|-----------------|-------------|
+| APP_KEY || SIM ||
+| APP_URL || NÃO ||
+| JWT_SECRET || SIM ||
+| DB_CONNECTION | pgsql, mysql | SIM ||
+| DB_HOST || SIM ||
+| DB_PORT || SIM ||
+| DB_DATABASE || SIM ||
+| DB_USERNAME || SIM ||
+| DB_PASSWORD || SIM ||
+
+# Deploy - Docker
+
+```bash
+docker pull tcantalice/prodeb-mini-mundo-backend
+
+docker run \
+-e APP_KEY="" \
+-e JWT_SECRET="" \
+-e DB_CONNECTION="" \
+-e DB_HOST="" \
+-e DB_PORT= \
+-e DB_USERNAME="" \
+-e DB_PASSWORD="" \
+-p 80:80 \
+-v /var/www/storage/logs:<destino dos logs> \ # Diretório para armazenar os logs da aplicação
+tcantalice/prodb-mini-mundo-backend
+```
+
+
