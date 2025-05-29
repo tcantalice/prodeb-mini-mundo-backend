@@ -138,4 +138,13 @@ class Tarefa
     {
         return $this->dependeDe !== null;
     }
+
+    public function equals($other): bool
+    {
+        if (!$other instanceof self) {
+            return false;
+        }
+
+        return $other->getID()->equals($this->getID());
+    }
 }
