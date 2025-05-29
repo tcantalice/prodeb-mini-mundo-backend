@@ -2,8 +2,10 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\Tarefa\AlterarDependenciaRequest;
 use App\Api\Requests\Tarefa\CriarTarefaRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
+use App\UseCases\Tarefa\AdicionarDependencia;
 use App\UseCases\Tarefa\AlterarStatus;
 use App\UseCases\Tarefa\CriarTarefa;
 use App\UseCases\Tarefa\CriarTarefaInput;
@@ -62,9 +64,29 @@ class TarefaController extends Controller
         return $this->makeSuccessResponse([
             "id" => $tarefa->id,
             "descricao" => $tarefa->descricao,
-            "iniciado_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
+            "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
             "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
             "depende_de" => $tarefa->dependeDe
         ]);
+    }
+
+    public function changeDependency(
+        string $tarefaId,
+        AlterarDependenciaRequest $request,
+        AdicionarDependencia $adicionarDependenciaUseCase
+    ) {
+        $dependenciaId = $request->getDependenciaId();
+
+        if ($dependenciaId) {
+            $tarefa = $adicionarDependenciaUseCase->execute($tarefaId, $dependenciaId);
+
+            return $this->makeSuccessResponse([
+                "id" => $tarefa->id,
+                "descricao" => $tarefa->descricao,
+                "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
+                "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
+                "depende_de" => $tarefa->dependeDe
+            ]);
+        }
     }
 }
