@@ -10,6 +10,7 @@ use App\UseCases\Tarefa\AlterarStatus;
 use App\UseCases\Tarefa\CriarTarefa;
 use App\UseCases\Tarefa\CriarTarefaInput;
 use App\UseCases\Tarefa\ListarTarefasProjeto;
+use App\UseCases\Tarefa\RemoverDependencia;
 use App\UseCases\Tarefa\TarefaOutput;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,22 +74,21 @@ class TarefaController extends Controller
     public function changeDependencia(
         string $tarefaId,
         AlterarDependenciaRequest $request,
-        AdicionarDependencia $adicionarDependenciaUseCase
+        AdicionarDependencia $adicionarDependenciaUseCase,
+        RemoverDependencia $removerDependenciaUseCase
     ) {
         $dependenciaId = $request->getDependenciaId();
 
-        if ($dependenciaId) {
-            $tarefa = $adicionarDependenciaUseCase->execute($tarefaId, $dependenciaId);
+        $tarefa = $dependenciaId
+            ? $adicionarDependenciaUseCase->execute($tarefaId, $dependenciaId)
+            : $removerDependenciaUseCase->execute($tarefaId);
 
-            return $this->makeSuccessResponse([
-                "id" => $tarefa->id,
-                "descricao" => $tarefa->descricao,
-                "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
-                "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
-                "depende_de" => $tarefa->dependeDe
-            ]);
-        }
-
-        // TODO: Implementar chamada para o caso de remoção
+        return $this->makeSuccessResponse([
+            "id" => $tarefa->id,
+            "descricao" => $tarefa->descricao,
+            "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
+            "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
+            "depende_de" => $tarefa->dependeDe
+        ]);
     }
 }
