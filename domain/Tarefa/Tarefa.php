@@ -154,7 +154,7 @@ class Tarefa
             throw new \Exception('Uma tarefa não pode ser dependente dela mesma');
         }
 
-        if ($tarefa->hasDependencia()) {
+        if ($this->hasDependencia()) {
             throw new \Exception('A tarefa já possui dependência');
         }
 
