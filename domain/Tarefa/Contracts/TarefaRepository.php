@@ -10,7 +10,5 @@ interface TarefaRepository
 
     function find(string $id): ?Tarefa;
 
-    function findAllByDependencia(string $id): array;
-
     function findAllByProjeto(string $projetoRef): array;
 }
