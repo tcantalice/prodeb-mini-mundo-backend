@@ -94,7 +94,7 @@ class Tarefa extends Model
     {
         return $this->relationTarefaPredecessora !== null
             ? new TarefaPredecessora(
-                $this->relationTarefaPredecessora->getAttribute(Tarefa::DOMAIN_REF),
+                IdTarefa::restore($this->relationTarefaPredecessora->getAttribute(Tarefa::DOMAIN_REF)),
                 $this->relationTarefaPredecessora->getAttribute(Tarefa::DATA_HORA_FIM)
             ) : null;
     }
