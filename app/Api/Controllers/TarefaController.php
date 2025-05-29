@@ -70,7 +70,7 @@ class TarefaController extends Controller
         ]);
     }
 
-    public function changeDependency(
+    public function changeDependencia(
         string $tarefaId,
         AlterarDependenciaRequest $request,
         AdicionarDependencia $adicionarDependenciaUseCase
@@ -88,5 +88,7 @@ class TarefaController extends Controller
                 "depende_de" => $tarefa->dependeDe
             ]);
         }
+
+        // TODO: Implementar chamada para o caso de remoção
     }
 }
