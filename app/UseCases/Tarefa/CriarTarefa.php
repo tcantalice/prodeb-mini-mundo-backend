@@ -19,7 +19,7 @@ class CriarTarefa
         //
     }
 
-    public function execute(CriarTarefaInput $input)
+    public function execute(CriarTarefaInput $input): TarefaOutput
     {
         $tarefaPredecessora = null;
 
@@ -52,5 +52,15 @@ class CriarTarefa
 
             throw new FalhaInternaException($th);
         }
+
+        return new TarefaOutput(
+            $tarefa->getID()->valor,
+            $tarefa->getDescricao(),
+            $tarefa->getProjetoRef(),
+            $tarefa->criadoEm(),
+            $tarefa->iniciadoEm(),
+            $tarefa->finalizadoEm(),
+            $tarefa->dependeDe()
+        );
     }
 }
