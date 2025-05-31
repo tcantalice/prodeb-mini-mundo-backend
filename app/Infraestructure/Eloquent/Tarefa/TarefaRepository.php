@@ -3,22 +3,29 @@
 namespace App\Infraestructure\Eloquent\Tarefa;
 
 use App\Infraestructure\Eloquent\Tarefa\Tarefa as Model;
-use Domain\Tarefa\Contracts\TarefaRepository as Contract;
+use Domain\Tarefa\Contracts\TarefaRepository as TarefaRepositoryContract;
+use Domain\Tarefa\Contracts\DependenciaTarefaRepository as DependenciaTarefaRepositoryContract;
+use Domain\Tarefa\IdTarefa;
 use Domain\Tarefa\Tarefa;
+use Domain\Tarefa\TarefaDependenteList;
 use Psr\Log\LoggerInterface;
 
-class TarefaRepository implements Contract
+class TarefaRepository implements TarefaRepositoryContract, DependenciaTarefaRepositoryContract
 {
     public function __construct(private LoggerInterface $logger)
     {
         //
     }
-    public function findAllByDependencia(string $id): array
+
+    public function findAllDependentes(string $id): TarefaDependenteList
     {
-        return Model::byTarefaPredecessora(tarefaRef: $id)
-            ->orderBy(Model::CRIADO_EM)->get()
-            ->map(fn (Model $item) => $item->toEntity())
-            ->toArray();
+        return new TarefaDependenteList(
+            IdTarefa::restore($id),
+            Model::byTarefaPredecessora(tarefaRef: $id)
+                ->orderBy(Model::CRIADO_EM)->get()
+                ->map(fn (Model $item) => $item->toEntity())
+                ->toArray()
+        );
     }
 
     public function findAllByProjeto(string $projetoRef): array

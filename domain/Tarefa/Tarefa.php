@@ -138,4 +138,34 @@ class Tarefa
     {
         return $this->dependeDe !== null;
     }
+
+    public function equals($other): bool
+    {
+        if (!$other instanceof self) {
+            return false;
+        }
+
+        return $other->getID()->equals($this->getID());
+    }
+
+    public function addDependencia(Tarefa $tarefa)
+    {
+        if ($this->equals($tarefa)) {
+            throw new \Exception('Uma tarefa não pode ser dependente dela mesma');
+        }
+
+        if ($this->hasDependencia()) {
+            throw new \Exception('A tarefa já possui dependência');
+        }
+
+        $this->dependeDe = new TarefaPredecessora(
+            $tarefa->getID(),
+            $tarefa->finalizadoEm()
+        );
+    }
+
+    public function removeDependencia()
+    {
+        $this->dependeDe = null;
+    }
 }

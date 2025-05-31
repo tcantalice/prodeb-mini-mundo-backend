@@ -22,6 +22,7 @@ Route::middleware('api')
             Route::get('/projetos/{idProjeto}/tarefas', [TarefaController::class, 'listByProjeto']);
 
             Route::patch('/tarefas/{idTarefa}/status', [TarefaController::class, 'changeStatus']);
+            Route::patch('/tarefas/{idTarefa}/dependencia', [TarefaController::class, 'changeDependencia']);
         });
 
     });

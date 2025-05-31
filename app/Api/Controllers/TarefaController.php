@@ -2,12 +2,15 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\Tarefa\AlterarDependenciaRequest;
 use App\Api\Requests\Tarefa\CriarTarefaRequest;
 use App\UseCases\Projeto\ConsultarProjeto;
+use App\UseCases\Tarefa\AdicionarDependencia;
 use App\UseCases\Tarefa\AlterarStatus;
 use App\UseCases\Tarefa\CriarTarefa;
 use App\UseCases\Tarefa\CriarTarefaInput;
 use App\UseCases\Tarefa\ListarTarefasProjeto;
+use App\UseCases\Tarefa\RemoverDependencia;
 use App\UseCases\Tarefa\TarefaOutput;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,14 +30,14 @@ class TarefaController extends Controller
         try {
             $consultarProjetoUseCase->execute($idProjeto);
 
-            $criarTarefaUseCase->execute(new CriarTarefaInput(
+            $tarefa = $criarTarefaUseCase->execute(new CriarTarefaInput(
                 $request->input('descricao'),
                 $idProjeto,
                 Auth::user()->getAuthIdentifier(),
                 $request->input('depende_de')
             ));
 
-            return $this->makeSuccessResponse(statusCode: 201);
+            return $this->makeSuccessResponse($this->parsePartialTarefaOutputToArray($tarefa),  201);
         } catch(\Throwable $th) {
             return response()->json(['message' => 'Erro ao cadastrar tarefa'], 500);
         }
@@ -44,27 +47,42 @@ class TarefaController extends Controller
     {
         $tarefas = $listarTarefasProjetoUseCase->execute($projetoId);
 
-        return $this->makeSuccessResponse(collect($tarefas)->map(function (TarefaOutput $tarefa) {
-            return [
-                "id" => $tarefa->id,
-                "descricao" => $tarefa->descricao,
-                "iniciada_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
-                "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
-                "depende_de" => $tarefa->dependeDe
-            ];
-        })->toArray());
+        return $this->makeSuccessResponse(collect($tarefas)
+            ->map(function (TarefaOutput $tarefa) {
+                return $this->parsePartialTarefaOutputToArray($tarefa);
+            })->toArray());
     }
 
     public function changeStatus(string $tarefaId, AlterarStatus $alterarStatusUseCase)
     {
         $tarefa = $alterarStatusUseCase->execute($tarefaId);
 
-        return $this->makeSuccessResponse([
-            "id" => $tarefa->id,
-            "descricao" => $tarefa->descricao,
-            "iniciado_em" => $tarefa->dataInicio ? $this->serializeDateTime($tarefa->dataInicio) : null,
-            "finalizada_em" => $tarefa->dataFim ? $this->serializeDateTime($tarefa->dataFim) : null,
-            "depende_de" => $tarefa->dependeDe
-        ]);
+        return $this->makeSuccessResponse($this->parsePartialTarefaOutputToArray($tarefa));
+    }
+
+    public function changeDependencia(
+        string $tarefaId,
+        AlterarDependenciaRequest $request,
+        AdicionarDependencia $adicionarDependenciaUseCase,
+        RemoverDependencia $removerDependenciaUseCase
+    ) {
+        $dependenciaId = $request->getDependenciaId();
+
+        $tarefa = $dependenciaId
+            ? $adicionarDependenciaUseCase->execute($tarefaId, $dependenciaId)
+            : $removerDependenciaUseCase->execute($tarefaId);
+
+        return $this->makeSuccessResponse($this->parsePartialTarefaOutputToArray($tarefa));
+    }
+
+    private function parsePartialTarefaOutputToArray(TarefaOutput $output): array
+    {
+        return [
+            "id"            => $output->id,
+            "descricao"     => $output->descricao,
+            "iniciada_em"   => $output->dataInicio ? $this->serializeDateTime($output->dataInicio) : null,
+            "finalizada_em" => $output->dataFim ? $this->serializeDateTime($output->dataFim) : null,
+            "depende_de"    => $output->dependeDe
+        ];
     }
 }
